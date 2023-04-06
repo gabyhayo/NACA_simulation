@@ -1,0 +1,24 @@
+{ Capteurs=
+	{ Type= ModeleCapteur }
+	{ Data=
+		{ NomFichier= resultats/capteurs/Sonde }
+		{ NbCapteurs= 4 }
+		{ Precision= 15 }
+		{ HAdaptation= 1 }
+		{ Dimension: dimension/dim.txt }
+		{ Coordonnees= 
+			{ Point1= 15.5 7 }
+			{ Point2= 1 0.1 }
+			{ Point3= 1 0.3 }
+			{ Point4= 1 0.5 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Temps }
+		{ Champ= VitesseP1 }
+		{ Champ= PressionP1 }
+                { Champ= NuTildeP1 }
+                { Champ= MuTurbP1 }
+	}
+}

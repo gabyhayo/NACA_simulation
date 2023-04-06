@@ -1,0 +1,69 @@
+{ SolveNS=
+	{ Type= ModeleElementsFinis }
+	{ Data=
+		{ SolveurLocal=
+			{ Type= VMSIncompressible }
+			{ Resolution= 4  }  
+			{ Preconditionneur= 24 } 
+			{ NbChampParametre= 6 }
+			{ ChampParametre= MuTotP1 ZeroVecteurP1 VitesseP1 VitesseMoinsP1 RhoP1 PasDeTemps }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= VitesseP1 PressionP1 }
+			{ Newton= 0.5 }
+		}
+		
+		{ Solveur= 
+			{ Type= SolveurLineaire }
+			{ TypeDeNorme= 1 }
+			{ Precision= 1e-6 }
+			{ IterMax= 0 }
+		}
+	}
+	{ Dependance=
+		{ Champ= VitesseMoinsP1 }
+		{ Champ= PasDeTemps }
+		{ Champ= MuTotP1 }
+		{ Champ= RhoP1 }
+		{ Champ= Zero }
+		{ Champ= ZeroVecteurP1 }
+		{ Maillage= MaillagePrincipal }
+		{ ModeleCL= BCNavierStokes }
+	}
+	{ DependanceModifiable=
+		{ Champ= VitesseP1 }
+		{ Champ= PressionP1 }
+	}
+}
+
+{ UpdateNS=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= VitesseP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= VitesseMoinsP1 }
+	}
+	
+	{ Operation= VitesseMoinsP1 = VitesseP1 }
+}
+
+{ InitNS=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= InitVitesse }
+	}
+}
+
+{ InitVitesse=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= VitesseInP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= VitesseP1 }
+	}
+	
+	{ Operation= VitesseP1 = VitesseInP1 }
+}

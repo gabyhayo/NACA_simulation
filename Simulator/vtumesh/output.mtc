@@ -1,0 +1,20 @@
+{ SortiesMesh=
+	{ Type= ModeleSortie }
+	{ Data=
+		{ NomFichier= resultats/2d/bullesmsh }
+		{ TypeFichier= SortieVtu }
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+
+	{ DependanceAEcrire=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Temps }
+		{ Champ= CompteurTemps }
+		{ Champ= VitesseP1 }
+		{ Champ= PressionP1 }
+		{ Champ= AppartientObjetP1 }
+		{ Champ= LevelSetObjetP1 }
+	}
+}

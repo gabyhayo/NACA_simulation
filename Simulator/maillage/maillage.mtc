@@ -1,0 +1,42 @@
+{ Maillage=
+	{ Type= ModeleMaillage }
+	{ Nom= MaillagePrincipal }
+	{ M: domaine.t }
+	{ Data=
+		{ Champ={ Type= P0_Scalaire_Par }{ Nom= BordElementP0 }		{ Data= ValeurItem 1 0.0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= BordNoeudP1 }		{ Data= ValeurItem 1 0.0 }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= CoordonneesP1 }		{ Data: dimension/vecteur.txt }}
+		{ NbChampSolution= 3 }
+		{ ChampSolution= BordNoeudP1 BordElementP0 CoordonneesP1 }
+		{ HAdaptation=
+			{ Sequence= "1 4\n2 4\n0\n" }
+			{ Effectue= Non }
+			 Effectue= Oui 
+			{ Marge= LaMarge }
+			{ Metrique= 1 }
+			{ Taille= MeTCP1 }
+			{ Transport=
+				{ Brique= Boite }
+				{ Methode= Logarithmique }
+				{ OptionInOut= 2 }
+				{ TailleMax= 1024 }
+			}
+		}
+		{ Partitionnement=
+			{ Scripts=
+				{ Remaillage= maillage/scripts/remaille.txt }
+				{ Decale= maillage/scripts/decale.txt }
+				{ Repartitionne= maillage/scripts/partit_ameliore.txt }
+			}
+		}
+		
+		{ NbChampParametre= 2 }
+		{ ChampParametre= MeTCP1 Oui }
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= MeTCP1 }
+		{ Champ= Oui }
+		{ Champ= LaMarge }
+	}
+}

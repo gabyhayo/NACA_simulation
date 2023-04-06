@@ -1,0 +1,58 @@
+{ Lanceur= MonModele }
+
+{ MonModele =
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= Interacteur }
+		{ Modele= Increments }
+	}
+}
+
+Geometrie
+{ Fichier: geometrie/parametres.mtc }
+{ Fichier: geometrie/geometres.mtc }
+{ Fichier: geometrie/geometresE.mtc }
+{ Fichier: geometrie/normales.mtc }
+{ Fichier: geometrie/volume.mtc }
+
+increments
+{ Fichier: increments/parametres.mtc }
+{ Fichier: increments/increments.mtc }
+{ Fichier: increments/temps.mtc }
+
+IO	
+{ Fichier: IO/parametres.mtc }
+{ Fichier: IO/capteurs.mtc }
+{ Fichier: IO/input.mtc }
+{ Fichier: IO/interacteur.mtc }
+{ Fichier: IO/output.mtc }
+
+Maillage
+{ Fichier: maillage/parametres.mtc }
+{ Fichier: maillage/adaptation.mtc }
+{ Fichier: maillage/associateur.mtc }
+{ Fichier: maillage/delafonction.mtc }
+{ Fichier: maillage/maillage.mtc }
+{ Fichier: maillage/metriquegenerale.mtc }					Scalaire Vecteur
+
+Navier-Stokes
+{ Fichier: NavierStokes/parametres.mtc }
+{ Fichier: NavierStokes/BC.mtc }
+{ Fichier: NavierStokes/BCinlet.mtc }
+{ Fichier: NavierStokes/BCobjet.mtc }
+{ Fichier: NavierStokes/draglift.mtc }
+{ Fichier: NavierStokes/melange.mtc }
+{ Fichier: NavierStokes/NavierStokes.mtc }
+
+RANS
+{ Fichier: RANS/parametres.mtc }
+{ Fichier: RANS/IO.mtc }
+{ Fichier: RANS/modele.mtc }
+{ Fichier: RANS/resolution.mtc }
+
+RANS Spalart-Allmaras
+{ Fichier: SpalartAllmaras/parametres.mtc }
+{ Fichier: SpalartAllmaras/BC.mtc }
+{ Fichier: SpalartAllmaras/BCinlet.mtc }
+{ Fichier: SpalartAllmaras/convdiffreac.mtc }
+{ Fichier: SpalartAllmaras/SpalartAllmaras.mtc }

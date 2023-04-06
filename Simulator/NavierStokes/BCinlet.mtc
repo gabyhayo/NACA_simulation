@@ -1,0 +1,52 @@
+{ BCInNS=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= CalcInNS }
+	}
+}
+
+{ CalcInNS=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= InitVitesseIn }
+		{ Modele= ConcatVitesseIn }
+	}
+}
+
+{ InitVitesseIn=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Zero }
+		{ Champ= Un }
+	}
+	{ DependanceModifiable=
+		{ Champ= VxInP1 }
+		{ Champ= VyInP1 }
+	}
+	
+	{ Operation= VxInP1 = Un }
+	
+	{ Operation= VyInP1 = Zero }
+}
+
+{ ConcatVitesseIn=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISConcatenation }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= VitesseInP1 }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= VxInP1 VyInP1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= VxInP1 }
+		{ Champ= VyInP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= VitesseInP1 }
+	}
+}

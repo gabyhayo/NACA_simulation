@@ -1,0 +1,19 @@
+{ EntreeMesh=
+	{ Type= ModeleEntree }
+	{ Data=
+		{ NomFichier= resultats/2d/bulles }
+		{ TypeFichier= EntreeVtu }
+		{ Actif= 1 }
+		{ AutoRestart= 0 }
+		{ Numero= 387 }
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+	{ DependanceALire=
+		{ Champ= Temps }
+		{ Champ= CompteurTemps }
+		{ Champ= VitesseP1 }
+		{ Champ= PressionP1 }
+	}
+}

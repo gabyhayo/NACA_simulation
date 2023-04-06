@@ -1,0 +1,290 @@
+{ LesModeles =
+    { Type= ModeleDeModeles }
+
+    { Data=
+	    { Champ=             
+            { Type= P0C_Scalaire_Par }             
+            { Nom= CompteurTemps }             
+            { Data= ValeurItem 1 0 }         
+        }     
+        { Champ=             
+            { Type= P0C_Scalaire_Par }             
+            { Nom= PasDeTemps }             
+            { Data= ValeurItem 1 1 }         
+        }
+        { Champ=
+            { Type= P0C_Scalaire_Par }             
+            { Nom= Temps }             
+            { Data= ValeurItem 1 0 }         
+        }
+        { Champ=             
+            { Type= P0C_Scalaire_Par }             
+            { Nom= MaxIterations }             
+            { Data= ValeurItem 1 20 }    
+        }
+	    { Champ=             
+            { Type= P0C_Scalaire_Par }             
+            { Nom= CompteurBox }             
+            { Data= ValeurItem 1 0 }         
+        }  
+    }
+	
+    { Dependance=  
+        { Maillage= MaillagePrincipal }
+		{ Modele= AdaptApplication }
+    }
+ }
+ 
+{ AdaptApplication =     
+    { Type= ModeleIncremental }     
+    { Data=         
+        { NomCompteur= CompteurTemps }   
+    }     
+    { Dependance=        
+        { Maillage= MaillagePrincipal }
+        
+        { ModeleAvantDebut= Initialisation }         
+        { ModeleIncrement= Corps }         
+        { ModeleTerminaison= Fin }     
+    } 
+} 
+
+{ Initialisation=
+    { Type= ModeleDeModeles }
+    { Dependance= 
+        { Maillage= MaillagePrincipal } 
+
+		{ Modele= Interacteur }
+		{ Modele= Parametres } 
+
+		 Modele= TargetFactor  // not used...computing the ratio between the inital mesh size and the user specified mesh size
+		{ Modele= Calculh }
+		{ Modele= PassageHP0EnHP1 }
+		{ Modele= MinMeshsize }
+		{ Modele= BoxOrSurfacePerso }
+		{ Modele= MeshPreparation } // compute the distribution of the mesh size in box1, box2 and box3
+
+        { Modele= Sorties }	 // output inital file
+		
+    }
+}
+
+{ Corps=     
+    { Type= ModeleDeModeles }     
+    { Dependance=  
+        { Maillage= MaillagePrincipal }
+		
+		{ Modele= MaillagePrincipal } // use the mesh size distribution and adapt the mesh
+		{ Modele= MaillagePrincipal } // remove it if low quality is expected
+
+		{ Modele= Interacteur }
+
+		{ Modele= Parametres }
+		{ Modele= Objet }
+	    { Modele= MeshPreparation } 
+		{ Modele= IterationIncrement } // t = t + dt
+		{ Modele= Objet }
+	    { Modele= Sorties }
+        { Modele= SortiesMtc }
+      
+    } 
+} 
+
+
+{ IterationIncrement=     
+    { Type= ModeleTemporel }     
+    { Data=         
+        { NomTemps= Temps }         
+        { NomPasDeTemps= PasDeTemps } 
+    } 
+    { DependanceModifiable= 
+        { Champ= Temps } 
+    } 
+    { Dependance=         
+        { Maillage= MaillagePrincipal }               
+        { Champ= PasDeTemps } 
+    } 
+} 
+
+
+{ Fin=     
+    { Type= ModeleFinSurTemps }     
+    { Data=         
+        { NomTemps= Temps }
+        { NomTempsFin= MaxIterations }
+    }     
+    { Dependance=         
+        { Maillage= MaillagePrincipal }
+        { Champ= Temps }
+        { Champ= MaxIterations }
+    } 
+} 
+
+
+{ Maillage=
+	{ Type= ModeleMaillage }
+	{ Nom= MaillagePrincipal }
+	{ M: domaine.t } 
+	{ Data=
+		{ Champ= 
+			{ Type= P0_Scalaire_Par }
+			{ Nom= BordElement }
+			{ Data= ValeurItem 1 0 }
+		}
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= BordNoeud }
+			{ Data= ValeurItem 1 0 }
+		}
+		{ Champ= 
+			{ Type= P1_Vecteur_Par }
+			{ Nom= Coordonnees }
+			{ Data= ValeurItem 2 0 0 }
+		}
+		
+		{ Partitionnement=
+			{ Scripts=
+				{ Remaillage= Scripts/remaille.txt }
+				{ Decale= Scripts/decale.txt }
+				{ Repartitionne= Scripts/partit_ameliore.txt }
+				
+			}
+		}
+	    { HAdaptation=
+           		{ Effectue= One }
+				
+           		{ Taille= TailleDeMaille1 }  Meshsize
+
+				{ Transport=
+             		{ Brique= Boite }
+                	{ Methode= Logarithmique }
+                	{ TailleMax= 1024 }
+               	}
+        }
+
+	    { NbChampSolution= 2 }
+ 	    { ChampSolution= BordNoeud BordElement }
+ 	 
+	    { NbChampParametre= 2 }
+        { ChampParametre= TailleDeMaille1 One }
+	}
+		
+	{ Dependance= 	
+		{ Maillage= MaillagePrincipal }
+		{ Champ= TailleDeMaille1 }
+		{ Champ= One }
+	}
+}
+
+{ Sorties=
+    { Type= ModeleSortie }
+    { Data= 
+		{ Champ= 
+            { Type= P0C_Scalaire_Par }
+            { Nom= Frequency }
+            { Data= ValeurItem 1 1 }                        
+		}
+        { NomFichier= Output/Mesh } 
+        { NomFrequence= Frequency }
+        { NomCompteur= CompteurTemps }
+        { TypeFichier= SortieVtu }
+    }
+    { Dependance= 
+        { Maillage= MaillagePrincipal }
+        { Champ= CompteurTemps }
+    }
+
+    { DependanceAEcrire= 
+       { Maillage= MaillagePrincipal }	 	 
+	  
+        { Champ= Temps } 
+       
+        { Champ= LevelSetLayer1 }
+		{ Champ= LevelSetBL }
+        { Champ= LevelSetLayer2 }
+        { Champ= LevelSetLayer0 }
+       
+        { Champ= Appartient1 }
+        { Champ= Appartient2 }
+        
+		 Champ= TailleDeMaille1  
+		{ Champ= Meshsize2 }
+		{ Champ= Indicator }
+		{ Champ= LevelSetLayer2bis }
+		{ Champ= CompteurTemps }
+		{ Champ= GradientLevelSetP1 }
+		{ Champ= HessienneLevelSetP1 }
+		{ Champ= Hbackground }
+		{ Champ= Hbox11 }
+		{ Champ= Hbox2 }
+		{ Champ= Hbox3 }
+		{ Champ= Hmin }
+		{ Champ= Test }
+
+	}
+
+}
+
+
+{ SortiesMtc=
+	    { Type= ModeleSortie }
+	    { Data=        
+		   	
+	        { NomFichier= Output/Mesh }
+	        { NomFrequence= Frequency }
+	        { NomCompteur= CompteurTemps }
+	        { TypeFichier= SortieMtc } 
+	    }
+	    { Dependance= 
+	        { Maillage= MaillagePrincipal }
+	        { Champ= CompteurTemps }
+	        { Champ= Frequency }
+	    }
+	    { DependanceAEcrire= 
+			{ Maillage= MaillagePrincipal }
+	    }
+}
+
+{ IncrementeCompteurBox=
+    { Type= ModeleArithmetique }
+    { Dependance= 
+        { Maillage= MaillagePrincipal }
+        { Champ= One }
+    }
+    { DependanceModifiable= 
+        { Champ= CompteurBox }  
+    }
+	
+    { Operation= CompteurBox += One }
+
+}
+
+{ SortiesBox=
+    { Type= ModeleSortie }
+    { Data= 
+        { NomFichier= Output/Mesh_Box }
+        { NomFrequence= Frequency }
+        { NomCompteur= CompteurBox }
+        { TypeFichier= SortieVtu }
+    }
+    { Dependance= 
+        { Maillage= MaillagePrincipal }
+        { Champ= CompteurBox }
+    }
+
+    { DependanceAEcrire= 
+       { Maillage= MaillagePrincipal }	 	 
+	  
+        { Champ= Temps } 
+       
+        { Champ= LevelSetLayerBox }
+        { Champ= LevelSetLayer2 }
+       
+        { Champ= AppartientBox }
+        { Champ= Appartient2 }
+        
+		 Champ= TailleDeMaille1 
+
+	}
+
+}

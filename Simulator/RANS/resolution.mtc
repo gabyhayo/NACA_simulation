@@ -1,0 +1,73 @@
+{ CalcMuTurbIn=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= NuTildeInFluide }
+		{ Champ= RhoFluide }
+		{ Champ= NuRatio }
+		{ Champ= Cv1Pow3 }
+		{ Champ= MoinsUn }
+                { Champ= Zero }
+	}
+	{ DependanceModifiable=
+		{ Champ= NuTildeInFluidePow3 }
+		{ Champ= MuTurbInFluide }
+                { Champ= MuTurbInSolide }
+	}
+	
+	{ Operation= NuTildeInFluidePow3 = NuRatio }
+	{ Operation= NuTildeInFluidePow3 *= NuRatio }
+	{ Operation= NuTildeInFluidePow3 *= NuRatio }
+	
+	{ Operation= MuTurbInFluide = NuTildeInFluidePow3 }
+	{ Operation= MuTurbInFluide += Cv1Pow3 }
+	{ Operation= MuTurbInFluide /= NuTildeInFluidePow3 }
+	{ Operation= MuTurbInFluide **= MoinsUn }
+	
+	{ Operation= MuTurbInFluide *= NuTildeInFluide }
+	{ Operation= MuTurbInFluide *= RhoFluide }
+
+        { Operation= MuTurbInSolide *= Zero }
+}
+
+{ MelangeCorpsMuTurbIn=
+        { Type= ModeleParticulaire }
+        { Data=
+                { ItemSolveur=
+                        { Type= ISMelangeCorpsSolides }
+                        { NbChampSolution= 2 }
+                        { ChampSolution=  MuTurbInP1 AppartientMelangeP1 }
+                        { NbChampParametre= 6 }
+                        { ChampParametre= LevelSetObjetP1 MuTurbInSolide MuTurbInFluide Un Zero EpaisseurMelange }
+                }
+        }
+        { Dependance=
+                { Maillage= MaillagePrincipal }
+                { Champ= LevelSetObjetP1 }
+                { Champ= MuTurbInSolide }
+                { Champ= MuTurbInFluide }
+                { Champ= EpaisseurMelange }
+                { Champ= Un }
+                { Champ= Zero }
+        }
+        { DependanceModifiable=
+                { Champ= MuTurbInP1 }
+                { Champ= AppartientMelangeP1 }
+        }
+}
+
+{ CalcMuTot=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= MuTurbP1 }
+		{ Champ= MuP1 }
+		{ Champ= RhoP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= MuTotP1 }
+	}
+
+	{ Operation= MuTotP1 = MuTurbP1 }
+	{ Operation= MuTotP1 += MuP1 }
+}

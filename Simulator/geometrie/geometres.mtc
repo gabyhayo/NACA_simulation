@@ -1,0 +1,231 @@
+{ Geometres=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= GeometresE }
+		{ Modele= CalcNormales }
+		{ Modele= CalcVolume }
+	}
+}
+
+{ GeometresAdapt=
+	{ Type= ModeleDeModeles }
+	{ Dependance= 
+		{ Modele= DefinitionObjet }
+		{ Modele= GeoObjet }
+		{ Modele= DistanceObjet }
+		
+		{ Modele= DefinitionBox12 }
+		{ Modele= GeoBox12 }
+		{ Modele= DistanceBox12 }
+		
+		{ Modele= DefinitionBox23 }
+		{ Modele= GeoBox23 }
+		{ Modele= DistanceBox23 }
+	}
+}
+
+{ DefinitionBox12=
+	{ Type= ModeleDeMouvements }
+	{ Data=
+		{ Repere=
+			{ Dimension: dimension/dim.txt }
+			{ Nom= RepereBox12 }
+			{ Origine= -2.5 -4 }
+			{ Axes= 1 0 0 1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+{ GeoBox12=
+	{ Type= ModeleDeGeometres }
+	{ Data=
+		{ Geometre=
+			{ Nom= GeoBox12 }
+			{ Type= GeometreAnalytique }
+			{ Data=
+				{ Forme=
+				{ Type= Brique }
+				{ Dimension: dimension/dim.txt }
+					{ Data=
+						{ Dimension= 9.5 8 }
+					}
+				}
+				{ Repere= RepereBox12 }
+			}
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Modele= DefinitionBox12 }
+	}
+}
+
+{ DistanceBox12=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISGeometre }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= AppartientBox12P1 LevelSetBox12P1 }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= CoordonneesP1 PrecisionFrontieres }
+			{ Geometre= GeoBox12 }
+			{ Distance= 1 }
+			{ Appartient= 1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= CoordonneesP1 }
+		{ Champ= PrecisionFrontieres }
+	}
+	{ DependanceModifiable=
+		{ Champ= AppartientBox12P1 }
+		{ Champ= LevelSetBox12P1 }
+	}
+}
+
+{ DefinitionBox23=
+	{ Type= ModeleDeMouvements }
+	{ Data=
+		{ Repere=
+			{ Dimension: dimension/dim.txt }
+			{ Nom= RepereBox23 }
+			{ Origine= -5 -6 }
+			{ Axes= 1 0 0 1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+{ GeoBox23=
+	{ Type= ModeleDeGeometres }
+	{ Data=
+		{ Geometre=
+			{ Nom= GeoBox23 }
+			{ Type= GeometreAnalytique }
+			{ Data=
+				{ Forme=
+				{ Type= Brique }
+				{ Dimension: dimension/dim.txt }
+					{ Data=
+						{ Dimension= 20 12 }
+					}
+				}
+				{ Repere= RepereBox23 }
+			}
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Modele= DefinitionBox23 }
+	}
+}
+
+{ DistanceBox23=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISGeometre }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= AppartientBox23P1 LevelSetBox23P1 }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= CoordonneesP1 PrecisionFrontieres }
+			{ Geometre= GeoBox23 }
+			{ Distance= 1 }
+			{ Appartient= 1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= CoordonneesP1 }
+		{ Champ= PrecisionFrontieres }
+	}
+	{ DependanceModifiable=
+		{ Champ= AppartientBox23P1 }
+		{ Champ= LevelSetBox23P1 }
+	}
+}
+
+{ CalcLSObjetFiltree=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISfonctionTC }
+			{ Passe= 9 }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= LevelSetObjetP1Filtree }
+			{ NbChampParametre= 3 }
+			{ ChampParametre= LevelSetObjetP1 Lmin Lmax }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= LevelSetObjetP1 }
+		{ Champ= Lmax }
+		{ Champ= Lmin }
+	}
+	{ DependanceModifiable=
+		{ Champ= LevelSetObjetP1Filtree }
+	}
+}
+
+{ CalcLSBox12Filtree=
+	{ Type= ModeleParticulaire }
+	{ Data=	
+		{ ItemSolveur=
+			{ Type= ISfonctionTC }
+			{ Passe= 9 }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= LevelSetBox12P1Filtree }
+			{ NbChampParametre= 3 }
+			{ ChampParametre= LevelSetBox12P1 Lmin Lmax }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= LevelSetBox12P1 }
+		{ Champ= Lmax }
+		{ Champ= Lmin }
+	}
+	{ DependanceModifiable=
+		{ Champ= LevelSetBox12P1Filtree }
+	}
+}
+
+{ CalcLSBox23Filtree=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISfonctionTC }
+			{ Passe= 9 }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= LevelSetBox23P1Filtree }
+			{ NbChampParametre= 3 }
+			{ ChampParametre= LevelSetBox23P1 Lmin Lmax }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= LevelSetBox23P1 }
+		{ Champ= Lmax }
+		{ Champ= Lmin }
+	}
+	{ DependanceModifiable=
+		{ Champ= LevelSetBox23P1Filtree }
+	}
+}
+
+{ CalcLSFiltree=
+	{ Type= ModeleDeModeles }
+	{ Dependance= 
+		{ Modele= CalcLSObjetFiltree }
+		{ Modele= CalcLSBox12Filtree }
+		{ Modele= CalcLSBox23Filtree } 
+	}
+}

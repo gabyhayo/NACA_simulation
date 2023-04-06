@@ -1,0 +1,26 @@
+// Parametres NS
+{ Target= MuFluide 0.00005 }
+{ Target= RhoFluide 1 }
+{ Target= MuSolide 1000 }
+{ Target= RhoSolide 10 }
+{ Target= RhoRef 1 }
+{ Target= VRef 1 }
+{ Target= SRef 1 }
+
+// Parametres SA
+{ Target= NuRatio 2.47 }
+{ Target= EpsDistance 0.00035 }
+
+// Gestion temps
+{ Target= PasDeTempsIni 0.01 }
+{ Target= PasDeTempsRun 0.05 }
+{ Target= TempsPasDeTemps 1 }
+{ Target= TempsFin 70.0 }
+
+//IO
+{ Target= FreqVtk 10 }
+{ Target= Prompt 0 }
+{ Target= Prompteur 120000 }
+
+//Maillage
+{ Target= PrecisionFrontieres 0.00001 }

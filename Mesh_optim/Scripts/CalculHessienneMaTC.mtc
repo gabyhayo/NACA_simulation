@@ -1,0 +1,57 @@
+{ CalculXXUX2=
+    { Type= ModeleFonctionnel }
+    { Data=
+		{ Champ=
+            { Type= P1_Tenseur_Par }
+            { Nom= AX2 }
+            { Data= ValeurItem 9 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 }		
+		}
+        { SimplexSolveurFonctionnel=
+            { Type= SsfMaTC }
+            { Passe= 1 }
+            { NbChampSolution= 2 }
+            { ChampSolution=  AX2 XX }
+            { OperationsP1=
+                { NbChampsP1= 2 }
+                { Numero= 0 1 }
+                { Initialise= 0.0 0 0 }
+                { Operateur= += += }
+                { Moyenner= 0 0 }
+            }
+            { NbChampParametre= 1 }
+            { ChampParametre= GradientLevelSetP1 }
+        }
+    }
+    { DependanceModifiable=
+        { Champ= XX }
+        { Champ= AX2 }
+    }
+    { Dependance=
+        { Maillage= MaillagePrincipal }
+        { Champ= GradientLevelSetP1 }
+    }
+}
+
+{ HessienneLevelSetP1=
+    { Type= ModeleParticulaire }
+    { Data=
+        { ItemSolveur=
+            { Type= ISMaTC }
+            { Dimension= 2 }
+            { NbChampSolution= 2 }
+            { ChampSolution= HessienneLevelSetP1 AUX }
+            { NbChampParametre= 2 }
+            { ChampParametre= XX AX2 }
+        }
+    }
+
+    { DependanceModifiable=
+        { Champ= AUX }
+        { Champ= HessienneLevelSetP1 }
+	}
+    { Dependance=
+        { Maillage= MaillagePrincipal }
+        { Champ= XX }
+        { Champ= AX2 }
+    }
+}

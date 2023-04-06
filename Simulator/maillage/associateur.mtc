@@ -1,0 +1,159 @@
+{ Associateur=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= zeroAssociation }
+		
+		{ Modele= AssociationScalaire }
+		{ Modele= addFonction }
+		
+		 Modele= normaliseVecteur 
+		 Modele= AssociationVecteur 
+		 Modele= addFonction 
+	}
+}
+
+{ Associe=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= AssociationScalaire }
+		{ Modele= addFonction }
+	}
+}
+
+{ zeroAssociation=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= ZO }
+	}
+	{ DependanceModifiable=
+		{ Champ= NbComposantes }
+	}
+	
+	{ Operation= NbComposantes = ZO }
+}
+
+{ AssociationScalaire=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISfonctionTC }
+			{ Passe= 100 }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= LeVecteurP1 nbC }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= UneFonctionP1 NbComposantes }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= UneFonctionP1 }
+		{ Champ= NbComposantes }
+	}
+	{ DependanceModifiable=
+		{ Champ= LeVecteurP1 }
+		{ Champ= nbC }
+	}
+}
+
+{ addFonction=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= nbC }
+	}
+	{ DependanceModifiable=
+		{ Champ= NbComposantes }
+	}
+	
+	{ Operation= NbComposantes += nbC }
+}
+
+{ normaliseScalaire=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= ZO }
+	}
+	{ DependanceModifiable=
+		{ Champ= lemax }
+		{ Champ= UneFonctionP1 }
+	}
+	
+	{ Operation= lemax = ZO }
+	{ Operation= lemax =max UneFonctionP1 }
+	{ Operation= UneFonctionP1 /= lemax }
+}
+
+{ normaliseVecteur=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= LaNorme }
+		{ Modele= normalisation }
+	}
+}
+
+{ LaNorme=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISNorme }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= normeUnVecteurP1 }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= UnVecteurP1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= UnVecteurP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= normeUnVecteurP1 }
+	}
+}
+
+{ normalisation=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= MinNorme }
+		{ Champ= Nscaling }
+		{ Champ= ScaleNorme }
+		{ Champ= axxP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= normeUnVecteurP1 }
+		{ Champ= UnVecteurP1 }
+		{ Champ= UneFonctionP1 }
+	}
+	
+	{ Operation= UneFonctionP1 = normeUnVecteurP1 }
+	{ Operation= UneFonctionP1 *= ScaleNorme }
+	{ Operation= normeUnVecteurP1 > axxP1 }
+	{ Operation= UnVecteurP1 /= normeUnVecteurP1 }
+	{ Operation= UnVecteurP1 *= Nscaling }
+}
+
+{ AssociationVecteur=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISfonctionTC }
+			{ Passe= 100 }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= LeVecteurP1 nbC }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= UnVecteurP1 NbComposantes }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= UnVecteurP1 }
+		{ Champ= NbComposantes }
+	}
+	{ DependanceModifiable=
+		{ Champ= LeVecteurP1 }
+		{ Champ= nbC }
+	}
+}

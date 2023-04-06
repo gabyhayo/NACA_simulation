@@ -1,0 +1,177 @@
+{ CalcNormales= 
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= CalcNormaleP0 }
+		{ Modele= CalcNormaleP1 }
+		{ Modele= CalcNormeP1 }
+		{ Modele= NormaliseNormaleP1 }
+		{ Modele= CalcNormaleObjetDistP0 }
+		{ Modele= CalcNormaleObjetDistP1 }
+		{ Modele= CalcNormeObjetDistP1 }
+		{ Modele= NormaliseNormaleObjetDistP1 }
+	}
+}
+
+{ CalcNormaleP0=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfNormale }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= NormaleP0 }
+		}
+		{ Boucle= Frontiere }
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+	{ DependanceModifiable=
+		{ Champ= NormaleP0 }
+	}
+}
+
+{ CalcNormaleP1=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfTest }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= NormaleP1 }
+			{ OperationsP1=
+				{ NbChampsP1= 1 }
+				{ Numero= 0 }
+				{ Initialise= 0.0 }
+				{ Moyenner= 1 } ********** Normales unitaires
+				{ Operateur= += } ******** Normales sortantes
+			}
+			{ NbChampParametre= 1 }
+			{ ChampParametre= NormaleP0 }
+		}
+		{ Boucle= Frontiere }
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= NormaleP0 }
+	}
+	{ DependanceModifiable=
+		{ Champ= NormaleP1 }
+	}
+}
+
+{ CalcNormeP1=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISNorme }
+			{ TypeDeNorme= NORME_L2 }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= NormeP1 }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= NormaleP1 }
+		}
+	}
+	{ Dependance=
+	{ Maillage= MaillagePrincipal }
+		{ Champ= NormaleP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= NormeP1 }
+	}
+}
+
+{ NormaliseNormaleP1=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= NormeP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= NormaleP1 }
+	}
+	
+	{ Operation= NormaleP1 /= NormeP1 }
+}
+
+
+{ CalcNormaleObjetDistP0=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfGradient }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= NormaleObjetDistP0 }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= LevelSetObjetP1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= LevelSetObjetP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= NormaleObjetDistP0 }
+	}
+}
+
+{ CalcNormaleObjetDistP1=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfTest }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= NormaleObjetDistP1 }
+			{ OperationsP1=
+				{ NbChampsP1= 1 }
+				{ Numero= 0 }
+				{ Initialise= 0.0 }
+				{ Moyenner= 1 }
+				{ Operateur= += }
+			}
+			{ NbChampParametre= 1 }
+			{ ChampParametre= NormaleObjetDistP0 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= NormaleObjetDistP0 }
+	}
+	{ DependanceModifiable=
+		{ Champ= NormaleObjetDistP1 }
+	}
+}
+
+{ CalcNormeObjetDistP1=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISNorme }
+			{ TypeDeNorme= NORME_L2 }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= NormeP1 }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= NormaleObjetDistP1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= NormaleObjetDistP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= NormeP1 }
+	}
+}
+
+{ NormaliseNormaleObjetDistP1=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= NormeP1 }
+		{ Champ= MoinsUn }
+	}
+	{ DependanceModifiable=
+		{ Champ= NormaleObjetDistP1 }
+	}
+	
+	{ Operation= NormaleObjetDistP1 /= NormeP1 }
+	{ Operation= NormaleObjetDistP1 *= MoinsUn }
+}

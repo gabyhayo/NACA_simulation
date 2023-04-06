@@ -1,0 +1,423 @@
+{ GeometresE=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= GeoBord }
+		
+		{ Modele= DefinitionIn }
+		{ Modele= GeoIn }
+		{ Modele= DistanceIn }
+		
+		{ Modele= DefinitionBottom }
+		{ Modele= GeoBottom }
+		{ Modele= DistanceBottom }
+		
+		{ Modele= DefinitionOut }
+		{ Modele= GeoOut }
+		{ Modele= DistanceOut }
+		
+		{ Modele= DefinitionTop }
+		{ Modele= GeoTop }
+		{ Modele= DistanceTop }
+		
+		{ Modele= DefinitionEdge }
+		{ Modele= GeoEdge }
+		{ Modele= DistanceEdge }
+		
+		{ Modele= DefinitionObjet }
+		{ Modele= GeoObjet }
+		{ Modele= DistanceObjet }
+	}
+}
+
+{ GeoBord=
+	{ Type= ModeleDeGeometres }
+	{ Data=
+		{ Geometre=
+			{ Type= GeometreChamp }
+			{ Data=
+				{ Champ= BordNoeudP1 }
+				{ ValeurSeuilMin= 0.999999 }
+				{ ValeurSeuilMax= 1.000001 }
+			}
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+{ DefinitionIn=
+	{ Type= ModeleDeMouvements }
+	{ Data=
+		{ Repere=
+			{ Dimension: dimension/dim.txt }
+			{ Nom= RepereIn }
+			{ Origine= -5 0 }
+			{ Normale= 1 0 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+{ GeoIn=
+	{ Type= ModeleDeGeometres }
+	{ Data=
+		{ Geometre=
+			{ Nom= GeoIn }
+			{ Type= GeometreAnalytique }
+			{ Data=
+				{ Forme=
+					{ Dimension= 2 }
+					{ Type= DemiPlan }
+				}
+				{ Repere= RepereIn }
+			}
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Modele= DefinitionIn }
+	}
+}
+
+{ DistanceIn=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISGeometre }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= AppartientInP1 LevelSetInP1 }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= CoordonneesP1 PrecisionFrontieres }
+			{ Geometre= GeoIn }
+			{ Distance= 1 }
+			{ Appartient= 1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= CoordonneesP1 }
+		{ Champ= PrecisionFrontieres }
+	}
+	{ DependanceModifiable=
+		{ Champ= AppartientInP1 }
+		{ Champ= LevelSetInP1 }
+	}
+}
+
+{ DefinitionBottom=
+	{ Type= ModeleDeMouvements }
+	{ Data=
+		{ Repere=
+			{ Dimension: dimension/dim.txt }
+			{ Nom= RepereBottom }
+			{ Origine= 0 -7 }
+			{ Normale= 0 1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+{ GeoBottom=
+	{ Type= ModeleDeGeometres }
+	{ Data=
+		{ Geometre=
+			{ Nom= GeoBottom }
+			{ Type= GeometreAnalytique }
+			{ Data=
+				{ Forme=
+					{ Dimension= 2 }
+					{ Type= DemiPlan }
+				}
+				{ Repere= RepereBottom }
+			}
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Modele= DefinitionBottom }
+	}
+}
+
+{ DistanceBottom=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISGeometre }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= AppartientBottomP1 LevelSetBottomP1 }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= CoordonneesP1 PrecisionFrontieres }
+			{ Geometre= GeoBottom }
+			{ Distance= 1 }
+			{ Appartient= 1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= CoordonneesP1 }
+		{ Champ= PrecisionFrontieres }
+	}
+	{ DependanceModifiable=
+		{ Champ= AppartientBottomP1 }
+		{ Champ= LevelSetBottomP1 }
+	}
+}
+
+{ DefinitionOut=
+	{ Type= ModeleDeMouvements }
+	{ Data=
+		{ Repere=
+			{ Dimension: dimension/dim.txt }
+			{ Nom= RepereOut }
+			{ Origine= 15.5 0 }
+			{ Normale= -1 0 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+{ GeoOut=
+	{ Type= ModeleDeGeometres }
+	{ Data=
+		{ Geometre=
+			{ Nom= GeoOut }
+			{ Type= GeometreAnalytique }
+			{ Data=
+				{ Forme=
+					{ Dimension= 2 }
+					{ Type= DemiPlan }
+				}
+				{ Repere= RepereOut }
+			}
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Modele= DefinitionOut }
+	}
+}
+
+{ DistanceOut=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISGeometre }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= AppartientOutP1 LevelSetOutP1 }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= CoordonneesP1 PrecisionFrontieres }
+			{ Geometre= GeoOut }
+			{ Distance= 1 }
+			{ Appartient= 1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= CoordonneesP1 }
+		{ Champ= PrecisionFrontieres }
+	}
+	{ DependanceModifiable=
+		{ Champ= AppartientOutP1 }
+		{ Champ= LevelSetOutP1 }
+	}
+}
+
+{ DefinitionTop=
+	{ Type= ModeleDeMouvements }
+	{ Data=
+		{ Repere=
+			{ Dimension: dimension/dim.txt }
+			{ Nom= RepereTop }
+			{ Origine= 0 7 }
+			{ Normale= 0 -1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+{ GeoTop=
+	{ Type= ModeleDeGeometres }
+	{ Data=
+		{ Geometre=
+			{ Nom= GeoTop }
+			{ Type= GeometreAnalytique }
+			{ Data=
+				{ Forme=
+					{ Dimension= 2 }
+					{ Type= DemiPlan }
+				}
+				{ Repere= RepereTop }
+			}
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Modele= DefinitionTop }
+	}
+}
+
+{ DistanceTop=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISGeometre }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= AppartientTopP1 LevelSetTopP1 }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= CoordonneesP1 PrecisionFrontieres }
+			{ Geometre= GeoTop }
+			{ Distance= 1 }
+			{ Appartient= 1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= CoordonneesP1 }
+		{ Champ= PrecisionFrontieres }
+	}
+	{ DependanceModifiable=
+		{ Champ= AppartientTopP1 }
+		{ Champ= LevelSetTopP1 }
+	}
+}
+
+{ DefinitionEdge=
+	{ Type= ModeleDeMouvements }
+	{ Data=
+		{ Repere=
+			{ Dimension: dimension/dim.txt }
+			{ Nom= RepereEdge }
+			{ Origine= 15.5 7 }
+			{ Normale= 0 -1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+{ GeoEdge=
+	{ Type= ModeleDeGeometres }
+	{ Data=
+		{ Geometre=
+			{ Nom= GeoEdge }
+			{ Type= GeometreAnalytique }
+			{ Data=
+				{ Forme=
+					{ Dimension= 2 }
+					{ Type= DemiPlan }
+					{ Data=
+						{ Rayon= 0.001 }
+					}
+				}
+				{ Repere= RepereEdge }
+			}
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Modele= DefinitionEdge }
+	}
+}
+
+{ DistanceEdge=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISGeometre }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= AppartientEdgeP1 LevelSetEdgeP1 }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= CoordonneesP1 PrecisionFrontieres }
+			{ Geometre= GeoEdge }
+			{ Distance= 1 }
+			{ Appartient= 1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= CoordonneesP1 }
+		{ Champ= PrecisionFrontieres }
+	}
+	{ DependanceModifiable=
+		{ Champ= AppartientEdgeP1 }
+		{ Champ= LevelSetEdgeP1 }
+	}
+}
+
+{ DefinitionObjet=
+	{ Type= ModeleDeMouvements }
+	{ Data=
+		{ Repere=
+			{ Dimension: dimension/dim.txt }
+			{ Nom= RepereObjet }
+			{ Origine= 0 0 }
+			{ Axes= 1 0 0 1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+{ GeoObjet=
+	{ Type= ModeleDeGeometres }
+	{ Data=
+		{ Geometre=
+			{ Nom= GeoObjet }
+			{ Type= GeometreAnalytique }
+			{ Data=
+				{ Forme=
+					{ Type= FormeNewMaillageBis }
+					{ Data=
+					{ M: naca.t }
+						{ Localisation=
+							{ Brique= Boite }
+							{ Methode= Logarithmique }
+							{ TailleMax= 1024 }
+						}
+					}
+				}
+				{ Repere= RepereObjet }
+			}
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Modele= DefinitionObjet }
+	}
+}
+
+{ DistanceObjet=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISGeometre }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= AppartientObjetP1 LevelSetObjetP1 }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= CoordonneesP1 PrecisionFrontieres }
+			{ Geometre= GeoObjet }
+			{ Distance= 1 }
+			{ Appartient= 1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= CoordonneesP1 }
+		{ Champ= PrecisionFrontieres }
+	}
+	{ DependanceModifiable=
+		{ Champ= AppartientObjetP1 }
+		{ Champ= LevelSetObjetP1 }
+	}
+}

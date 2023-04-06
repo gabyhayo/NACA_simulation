@@ -1,0 +1,23 @@
+{ RANSParametresP0C=
+	{ Type= ModeleConstant }
+	{ Data=
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= EpsDistance }				{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= MuRatio }					{ Data= ValeurItem 1 0 }}
+                { Champ={ Type= P0C_Scalaire_Par }{ Nom= MuTurbInFluide }                            { Data= ValeurItem 1 0 }}
+                { Champ={ Type= P0C_Scalaire_Par }{ Nom= MuTurbInSolide }                            { Data= ValeurItem 1 0 }}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+{ RANSParametresP1=
+	{ Type= ModeleConstant }
+	{ Data=
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= MuTurbP1 }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= MuTurbInP1 }				{ Data= ValeurItem 1 0 }}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}

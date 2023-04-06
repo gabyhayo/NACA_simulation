@@ -1,0 +1,54 @@
+{ Sorties=
+	{ Type= ModeleSortie }
+	{ Data=
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= FreqVtk }{ Data= ValeurItem 1 1 }}
+		{ NomFichier= resultats/2d/bulles }
+		{ NomFrequence= FreqVtk }
+		{ NomCompteur= CompteurTemps }
+		{ TypeFichier= SortieVtu }
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= CompteurTemps }
+	}
+	
+	{ DependanceAEcrire=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Temps }
+		{ Champ= CompteurTemps }
+		{ Champ= VitesseP1 }
+		{ Champ= PressionP1 }
+                { Champ= NuTildeP1 }
+                { Champ= MuTurbP1 }
+                { Champ= NuTildeInP1 }
+                { Champ= MuTurbInP1 }
+		
+		{ Champ= AppartientInP1 }
+		{ Champ= AppartientBottomP1 }
+		{ Champ= AppartientOutP1 }
+		{ Champ= AppartientTopP1 }
+		{ Champ= AppartientObjetP1 }
+		
+		{ Champ= MuP1 }
+		{ Champ= RhoP1 }
+	}
+}
+
+{ SortiesMTC=
+	{ Type= ModeleSortie }
+	{ Data=
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= FrequenceStockage_mtc }{ Data= ValeurItem 1 1 }}
+		{ NomFichier= resultats/2d/bulles }
+		{ NomFrequence= FrequenceStockage_mtc }
+		{ NomCompteur= CompteurTemps }
+		{ TypeFichier= SortieMtc }
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= CompteurTemps }
+	}
+	
+	{ DependanceAEcrire=
+		{ Maillage= MaillagePrincipal }
+	}
+}

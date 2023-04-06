@@ -1,0 +1,64 @@
+{ BCInSA=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= CalcInSA }
+	}
+}
+
+{ CalcInSA=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+                { Modele= CalcNuTildeIn }
+                { Modele= MelangeCorpsNuTildeIn }
+                { Modele= CalcMuTurbIn }
+                { Modele= MelangeCorpsMuTurbIn }
+	}
+}
+
+{ CalcNuTildeIn=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= MuFluide }
+		{ Champ= RhoFluide }
+		{ Champ= NuRatio }
+                { Champ= Zero }
+	}
+	{ DependanceModifiable=
+		{ Champ= NuTildeInFluide }
+                { Champ= NuTildeInSolide }
+	}
+	
+	{ Operation= NuTildeInFluide = MuFluide }
+	{ Operation= NuTildeInFluide /= RhoFluide }
+	{ Operation= NuTildeInFluide *= NuRatio }
+
+        { Operation= NuTildeInSolide = Zero }
+}
+
+{ MelangeCorpsNuTildeIn=
+        { Type= ModeleParticulaire }
+        { Data=
+                { ItemSolveur=
+                        { Type= ISMelangeCorpsSolides }
+                        { NbChampSolution= 2 }
+                        { ChampSolution=  NuTildeInP1 AppartientMelangeP1 }
+                        { NbChampParametre= 6 }
+                        { ChampParametre= LevelSetObjetP1 NuTildeInSolide NuTildeInFluide Un Zero EpaisseurMelange }
+                }
+        }
+        { Dependance=
+                { Maillage= MaillagePrincipal }
+                { Champ= LevelSetObjetP1 }
+                { Champ= NuTildeInSolide }
+                { Champ= NuTildeInFluide }
+                { Champ= EpaisseurMelange }
+                { Champ= Un }
+                { Champ= Zero }
+        }
+        { DependanceModifiable=
+                { Champ= NuTildeInP1 }
+                { Champ= AppartientMelangeP1 }
+        }
+}
+

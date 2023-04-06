@@ -1,0 +1,76 @@
+{ Melange=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Modele= CalcEpaisseurMelange }
+		{ Modele= MelangeCorpsSolidesMu }
+		{ Modele= MelangeCorpsSolidesRho }
+	}
+}
+
+{ CalcEpaisseurMelange=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= MeshSizeMin }
+		{ Champ= Deux }
+	}
+	{ DependanceModifiable=
+		{ Champ= EpaisseurMelange }
+	}
+	
+	{ Operation= EpaisseurMelange = MeshSizeMin }
+	{ Operation= EpaisseurMelange *= Deux }
+}
+
+{ MelangeCorpsSolidesMu=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISMelangeCorpsSolides }
+			{ NbChampSolution= 2 }
+			{ ChampSolution=  MuP1 AppartientMelangeP1 }
+			{ NbChampParametre= 6 }
+			{ ChampParametre= LevelSetObjetP1 MuSolide MuFluide Un Zero EpaisseurMelange }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= LevelSetObjetP1 }
+		{ Champ= MuSolide }
+		{ Champ= MuFluide }
+		{ Champ= EpaisseurMelange }
+		{ Champ= Un }
+		{ Champ= Zero }
+	}
+	{ DependanceModifiable=
+		{ Champ= MuP1 }
+		{ Champ= AppartientMelangeP1 }
+	}
+}
+
+{ MelangeCorpsSolidesRho=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISMelangeCorpsSolides }
+			{ NbChampSolution= 2 }
+			{ ChampSolution=  RhoP1 AppartientMelangeP1 }
+			{ NbChampParametre= 6 }
+			{ ChampParametre= LevelSetObjetP1 RhoSolide RhoFluide Un Zero EpaisseurMelange }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= LevelSetObjetP1 }
+		{ Champ= RhoSolide }
+		{ Champ= RhoFluide }
+		{ Champ= EpaisseurMelange }
+		{ Champ= Un }
+		{ Champ= Zero }
+	}
+	{ DependanceModifiable=
+		{ Champ= RhoP1 }
+		{ Champ= AppartientMelangeP1 }
+	}
+}

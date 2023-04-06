@@ -1,0 +1,81 @@
+{ BCSA=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= BCInSA }
+		{ Modele= BCNuTilde }
+	}
+}
+
+{ BCNuTilde=
+	{ Type= ModeleCLSurGeometres }
+	{ Data=
+		{ Entite= NOEUDS }
+		
+		{ ConditionLimite=
+			{ Nom= InletSA }
+			{ Type= CLDirichlet }
+			{ Appartient= AppartientInP1 }
+			{ NbChamps= 1 }
+			{ Degres= BCNuTildeImposeeP1 }
+			{ Valeurs= NuTildeInP1 }
+			{ Priorite= 3 }
+		}
+		
+		{ ConditionLimite=
+			{ Nom= BottomSA }
+			{ Type= CLDirichlet }
+			{ Appartient= AppartientBottomP1 }
+			{ NbChamps= 1 }
+			{ Degres= BCNuTildeLibreP1 }
+			{ Valeurs= ZeroP1 }
+			{ Priorite= 2 }
+		}
+		
+		{ ConditionLimite=
+			{ Nom= OutletSA }
+			{ Type= CLDirichlet }
+			{ Appartient= AppartientOutP1 }
+			{ NbChamps= 1 }
+			{ Degres= BCNuTildeLibreP1 }
+			{ Valeurs= ZeroP1 }
+			{ Priorite= 1 }
+		}
+		
+		{ ConditionLimite=
+			{ Nom= TopSA }
+			{ Type= CLDirichlet }
+			{ Appartient= AppartientTopP1 }
+			{ NbChamps= 1 }
+			{ Degres= BCNuTildeLibreP1 }
+			{ Valeurs= ZeroP1 }
+			{ Priorite= 2 }
+		}
+		
+		{ ConditionLimite=
+			{ Nom= ObjetSA }
+			{ Type= CLDirichlet }
+			{ Appartient= AppartientObjetP1 }
+			{ NbChamps= 1 }
+			{ Degres= BCNuTildeImposeeP1 }
+			{ Valeurs= ZeroP1 }
+			{ Priorite= 3 }
+		}
+	}
+	
+	{ Precision= PrecisionFrontieres }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= AppartientInP1 }
+		{ Champ= AppartientBottomP1 }
+		{ Champ= AppartientOutP1 }
+		{ Champ= AppartientTopP1 }
+		{ Champ= AppartientObjetP1 }
+		{ Champ= BordNoeudP1 }
+		{ Champ= PrecisionFrontieres }
+		{ Champ= BCNuTildeImposeeP1 }
+		{ Champ= BCNuTildeLibreP1 }
+		{ Champ= NuTildeInP1 }
+		{ Champ= NuTildeOutP1 }
+		{ Champ= ZeroP1 }
+	}
+}

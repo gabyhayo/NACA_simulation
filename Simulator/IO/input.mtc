@@ -1,0 +1,28 @@
+{ Reprise=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= Lire }
+	}
+}
+
+{ Lire=
+	{ Type= ModeleReprise }
+	{ Data=
+
+		{ TypeFichier= EntreeVtu }
+		{ Actif= 0 }
+		{ NomFichier= restart }
+		{ AutoRestart= 0 }
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+	{ DependanceALire=
+		{ Champ= Temps }
+		{ Champ= CompteurTemps }
+		{ Champ= VitesseP1 }
+		{ Champ= PressionP1 }
+		{ Champ= NuTildeP1 }
+		{ Champ= MuTurbP1 }
+	}
+}

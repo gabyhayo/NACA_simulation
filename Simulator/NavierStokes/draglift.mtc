@@ -1,0 +1,204 @@
+{ PrepareDragLift=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= CalcForceDir }
+		{ Modele= CalcForceRef }
+	}
+}
+
+{ CalcForceDir=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= AppartientObjetP1 }
+		{ Champ= MoinsUn }
+	}
+	{ DependanceModifiable=
+		{ Champ= CxVecteurP1 }
+		{ Champ= CyVecteurP1 }
+	}
+	
+	{ Operation= CxVecteurP1 *= AppartientObjetP1 }
+	{ Operation= CxVecteurP1 *= MoinsUn }
+	
+	{ Operation= CyVecteurP1 *= AppartientObjetP1 }
+	{ Operation= CyVecteurP1 *= MoinsUn }
+}
+
+{ CalcForceRef=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= RhoRef }
+		{ Champ= VRef }
+		{ Champ= SRef }
+		{ Champ= Un }
+		{ Champ= Deux }
+	}
+	{ DependanceModifiable=
+		{ Champ= ForceRef }
+		{ Champ= UnSurForceRef }
+	}
+	
+	{ Operation= ForceRef = RhoRef }
+	{ Operation= ForceRef *= VRef }
+	{ Operation= ForceRef *= VRef }
+	{ Operation= ForceRef /= Deux }
+	
+	{ Operation= ForceRef *= SRef }
+	
+	{ Operation= UnSurForceRef = Un }
+	{ Operation= UnSurForceRef /= ForceRef }
+}
+
+{ DragLift=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= CalcCxP0 }
+		{ Modele= CalcCyP0 }
+		{ Modele= CalcCvectP0 }
+		{ Modele= IntegreCvect }
+		{ Modele= NormaliseCvect }
+		{ Modele= EcrireCvect }
+	}
+}
+
+{ CalcCxP0=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfDragLift }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= CxP0 }
+			{ NbChampParametre= 7 }
+			{ ChampParametre= PressionP1 MuTotP1 VitesseP1 VitesseMoinsP1 CxVecteurP1 PasDeTemps Un }
+		}
+		{ Boucle= Volume }
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= VitesseP1 }
+		{ Champ= VitesseMoinsP1 }
+		{ Champ= PasDeTemps }
+		{ Champ= PressionP1 }
+		{ Champ= CxVecteurP1 }
+		{ Champ= MuTotP1 }
+		{ Champ= Un }
+	}
+	{ DependanceModifiable=
+		{ Champ= CxP0 }
+	}
+}
+
+{ CalcCyP0=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfDragLift }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= CyP0 }
+			{ NbChampParametre= 7 }
+			{ ChampParametre= PressionP1 MuTotP1 VitesseP1 VitesseMoinsP1 CyVecteurP1 PasDeTemps Un }
+		}
+		{ Boucle= Volume }
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= VitesseP1 }
+		{ Champ= VitesseMoinsP1 }
+		{ Champ= PasDeTemps }
+		{ Champ= PressionP1 }
+		{ Champ= MuTotP1 }
+		{ Champ= CyVecteurP1 }
+		{ Champ= Un }
+	}
+	{ DependanceModifiable=
+		{ Champ= CyP0 }
+	}
+}
+
+{ CalcCvectP0=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISConcatenation }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= CvectP0 }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= CxP0 CyP0 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= CxP0 }
+		{ Champ= CyP0 }
+	}
+	{ DependanceModifiable=
+		{ Champ= CvectP0 }
+	}
+}
+
+{ IntegreCvect=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ Boucle= Volume }
+		{ ItemSolveur=
+			{ Type= ISSomme }
+			{ Operations=
+				{ Initialise= Zero }
+			}
+			{ NbChampSolution= 1 }
+			{ ChampSolution= Cvect }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= CvectP0 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= CvectP0 }
+		{ Champ= Zero }
+	}
+	{ DependanceModifiable=
+		{ Champ= Cvect }
+	}
+}
+
+{ NormaliseCvect=
+	{ Type= ModeleParticulaire }
+	{Data=
+		{ ItemSolveur=
+			{ Type= ISProduit }
+			{ TermeATerme= 1 }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= Cvect }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= Cvect UnSurForceRef }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= UnSurForceRef }
+	}
+	{ DependanceModifiable=
+		{ Champ= Cvect }
+	}
+}
+
+{ EcrireCvect=
+	{ Type= ModeleCapteur }
+	{ Data=
+		{ NomFichier= resultats/capteurs/Efforts }
+		{ Precision= 15 }
+		{ NbCapteurs= 0 }
+		{ HAdaptation= 1 }
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Temps }
+		{ Champ= Cvect }
+		{ Champ= ForceRef }
+		{ Champ= RhoRef }
+		{ Champ= VRef }
+		{ Champ= SRef }
+	}
+}

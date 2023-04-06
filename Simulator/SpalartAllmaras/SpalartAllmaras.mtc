@@ -1,0 +1,213 @@
+{ SolveSA=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= PrepareSA }
+		{ Modele= AssembleConvDiffReacSA }
+		{ Modele= ConvDiffReacSA }
+		{ Modele= CalcMuTurbSA }
+		{ Modele= CalcMuTot }
+	}
+}
+
+{ AssembleConvDiffReacSA=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISSpalartAllmaras }
+			{ TypeDeLoi= SAneg }
+			{ Dimension: dimension/dim.txt }
+			{ NbChampSolution= 5 }
+			{ ChampSolution= ConvectionP1SA DiffusionP1SA ReactionP1SA DampP1 denvP1 }
+			{ NbChampParametre= 8 }
+			{ ChampParametre= VitesseP1 OmegaVitesseP1 NuTildeP1 GradNuTildeP1 LevelSetObjetP1 MuP1 RhoP1 EpsDistance }
+		}
+	}
+	
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= VitesseP1 }
+		{ Champ= OmegaVitesseP1 }
+		{ Champ= NuTildeP1 }
+		{ Champ= GradNuTildeP1 }
+		{ Champ= LevelSetObjetP1 }
+		{ Champ= MuP1 }
+		{ Champ= RhoP1 }
+		{ Champ= EpsDistance }
+		{ Champ= EpsLimiteurSA }
+	}
+	{ DependanceModifiable=
+		{ Champ= ConvectionP1SA }
+		{ Champ= DiffusionP1SA }
+		{ Champ= ReactionP1SA }
+		{ Champ= DampP1 }
+		{ Champ= denvP1 }
+	}
+}
+
+{ PrepareSA=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= CalcOmegaVitesseP0 }
+		{ Modele= CalcOmegaVitesseP1 }
+		{ Modele= CalcGradNuTildeP0 }
+		{ Modele= CalcGradNuTildeP1 }
+	}
+}
+
+{ CalcOmegaVitesseP0=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfVorticite }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= OmegaVitesseP0 }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= VitesseP1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= VitesseP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= OmegaVitesseP0 }
+	}
+}
+
+{ CalcOmegaVitesseP1=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfTest }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= OmegaVitesseP1 }
+			{ OperationsP1=
+				{ NbChampsP1= 1 }
+				{ Numero= 0 }
+				{ Initialise= 0.0 }
+				{ Operateur= += }
+				{ Moyenner= 1 }
+			}
+			{ NbChampParametre= 1 }
+			{ ChampParametre= OmegaVitesseP0 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= OmegaVitesseP0 }
+	}
+	{ DependanceModifiable=
+		{ Champ= OmegaVitesseP1 }
+	}
+}
+
+{ CalcGradNuTildeP0=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfGradient }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= GradNuTildeP0 }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= NuTildeP1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= NuTildeP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= GradNuTildeP0 }
+	}
+}
+
+{ CalcGradNuTildeP1=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfTest }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= GradNuTildeP1 }
+			{ OperationsP1=
+				{ NbChampsP1= 1 }
+				{ Numero= 0 }
+				{ Initialise= 0.0 }
+				{ Operateur= += }
+				{ Moyenner= 1 }
+			}
+			{ NbChampParametre= 1 }
+			{ ChampParametre= GradNuTildeP0 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= GradNuTildeP0 }
+	}
+	{ DependanceModifiable=
+		{ Champ= GradNuTildeP1 }
+	}
+}
+
+
+{ CalcMuTurbSA=
+	{ Type= ModeleArithmetique }
+	
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= NuTildeP1 }
+		{ Champ= DampP1 }
+		{ Champ= ZeroP1 }
+		{ Champ= RhoP1 }		
+	}
+	{ DependanceModifiable=
+		{ Champ= MuTurbP1 }
+	}
+	
+	{ Operation= MuTurbP1 = DampP1 }
+	{ Operation= MuTurbP1 *= NuTildeP1 }
+	{ Operation= MuTurbP1 *= RhoP1 }
+	
+	{ Operation= MuTurbP1 > ZeroP1 }
+}
+
+{ InitSA=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= NuTildeInP1 }
+		{ Champ= MuTurbInP1 }
+		{ Champ= MuP1 }
+		{ Champ= RhoP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= NuTildeP1 }
+		{ Champ= MuTurbP1 }
+		{ Champ= MuTotP1 }
+	}
+	
+	{ Operation= NuTildeP1 = NuTildeInP1 }
+	{ Operation= MuTurbP1 = MuTurbInP1 }
+
+	{ Operation= MuTotP1 = MuTurbP1 }
+	{ Operation= MuTotP1 += MuP1 }
+}
+
+{ UpdateSA=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= UpdateNuTilde }
+	}
+}
+
+{ UpdateNuTilde=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= NuTildeP1 }
+	}
+	{ DependanceModifiable= 
+		{ Champ= NuTildeMoinsP1 }
+	}
+	
+	{ Operation= NuTildeMoinsP1 = NuTildeP1 }
+}

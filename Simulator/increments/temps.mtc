@@ -1,0 +1,75 @@
+{ CheckTemps=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= CheckIsPasDeTemps }
+		{ Modele= CalcPasDeTemps }
+	}
+}
+
+{ CheckIsPasDeTemps=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Temps }
+		{ Champ= TempsPasDeTemps }
+		{ Champ= PasDeTemps }
+		{ Champ= Zero }
+		{ Champ= Deux }
+	}
+	{ DependanceModifiable=
+		{ Champ= CondPasDeTemps }
+		{ Champ= IsPasDeTemps }
+	}
+	
+	{ Operation= CondPasDeTemps = Temps }
+	{ Operation= CondPasDeTemps -= TempsPasDeTemps }
+	{ Operation= CondPasDeTemps *= Deux }
+	{ Operation= CondPasDeTemps += PasDeTemps }
+	
+	{ Operation= IsPasDeTemps = CondPasDeTemps }
+	{ Operation= IsPasDeTemps >? Zero }
+}
+
+{ CalcPasDeTemps=
+	{ Type= ModeleConditionnel }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ ChampCondition= IsPasDeTemps }
+		{ ModeleTrue= UpdatePasDeTemps }
+		{ ModeleFalse= InitPasDeTemps }
+	}
+}
+
+{ UpdatePasDeTemps=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= PasDeTempsRun }
+		{ Champ= Deux }
+	}
+	{ DependanceModifiable=
+		{ Champ= PasDeTemps }
+		{ Champ= DeuxPasDeTemps }
+	}
+	{ Operation= PasDeTemps = PasDeTempsRun }
+	
+	{ Operation= DeuxPasDeTemps = PasDeTemps }
+	{ Operation= DeuxPasDeTemps *= Deux }
+}
+
+{ InitPasDeTemps=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= PasDeTempsIni }
+		{ Champ= Deux }
+	}
+	{ DependanceModifiable=
+		{ Champ= PasDeTemps }
+		{ Champ= DeuxPasDeTemps }
+	}
+	{ Operation= PasDeTemps = PasDeTempsIni }
+	
+	{ Operation= DeuxPasDeTemps = PasDeTemps }
+	{ Operation= DeuxPasDeTemps *= Deux }
+}

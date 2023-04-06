@@ -1,0 +1,19 @@
+{ BCObjetNS=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= InitVitesseObjet }
+	}
+}
+
+{ InitVitesseObjet=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= ZeroVecteurP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= VitesseObjetP1 }
+	}
+	
+	{ Operation= VitesseObjetP1 = ZeroVecteurP1 }
+}

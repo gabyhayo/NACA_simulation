@@ -1,0 +1,44 @@
+{ Interacteur=
+	{ Type= ModeleInteracteur }
+	{ IHM= ihm.mtc }
+	{ Data=
+		{ Champ=
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Prompt }
+			{ Data= 1 1 1 }
+		}
+		{ Champ=
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Prompteur }
+			{ Data= 1 1 0 }
+		}
+	}
+	{ DependanceModifiable= 
+	
+		{ Champ= Prompt }
+		{ Champ= Prompteur }
+		{ Champ= CompteurTemps }
+		{ Champ= Hbox2 }
+		{ Champ= Hbox3 }
+		{ Champ= Growth }
+		{ Champ= Frequency }
+		{ Champ= Box }
+		{ Champ= Hbox }
+		{ Champ= Geo }
+		{ Champ= InverseLevelSet }
+		{ Champ= MaxIterations }
+		{ Champ= Np }
+		{ Champ= Surface }
+		{ Champ= Isotrope }
+		{ Champ= LengthRe }
+		{ Champ= Hint }
+		{ Champ= NbReynolds }
+		{ Champ= turb }
+		{ Champ= yplus }
+		{ Champ= LayersOverride }
+ 
+	}
+ 	{ Dependance= 
+        	{ Maillage= MaillagePrincipal }
+
+	}

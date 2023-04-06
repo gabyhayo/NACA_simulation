@@ -1,0 +1,268 @@
+
+{ MetriqueGenerale=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= Zero }
+		{ Modele= CalculXX }
+		{ Modele= GradA }
+		{ Modele= CalculXX2 }
+		{ Modele= LeLec }
+		{ Modele= CalculXX3 }
+		{ Modele= GradA2 }
+		{ Modele= IntegreErreur }
+		{ Modele= ErreurL1 }
+	}
+}
+
+{ Zero=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Zero }
+		{ Champ= ZeroVecteur }
+		{ Champ= ZeroTenseur }
+		{ Champ= ZeroVecteurTG }
+	}
+	{ DependanceModifiable=
+		{ Champ= ErreurL1 }
+		{ Champ= LaC }
+		{ Champ= ComptP1 }
+		{ Champ= XXP1 }
+		{ Champ= UXP1 }
+		{ Champ= UX2P1 }
+		{ Champ= GradientP1 }
+		{ Champ= Gradient2P1 }
+		{ Champ= ErreurP1 }
+	}
+
+	{ Operation= ErreurL1 = Zero }
+	{ Operation= LaC = Zero }
+	{ Operation= ComptP1 = Zero }
+	{ Operation= XXP1 = ZeroTenseur }
+	{ Operation= UXP1 = ZeroVecteur }
+	{ Operation= UX2P1 = ZeroVecteurTG }
+	{ Operation= GradientP1 = ZeroVecteur }
+	{ Operation= Gradient2P1 = ZeroVecteurTG }
+	{ Operation= ErreurP1 = Zero }
+}
+
+{ CalculXX=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfMaTC }
+			{ Passe= 1 }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= UX2P1 XXP1 }
+			{ OperationsP1=
+				{ NbChampsP1= 2 }
+				{ Numero= 0 1 }
+				{ Initialise= 0.0 0 0 }
+				{ Operateur= += += }
+				{ Moyenner= 0 0 }
+			}
+			{ NbChampParametre= 1 }
+			{ ChampParametre= LeVecteurP1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= LeVecteurP1 }
+		{ Champ= LaFonctionP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= UX2P1 }
+		{ Champ= XXP1 }
+	}
+}
+
+{ GradA=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISMaTC }
+			{ Dimension: dimension/dim.txt }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= Gradient2P1 LeC }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= XXP1 UX2P1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= XXP1 }
+		{ Champ= UX2P1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= Gradient2P1 }
+		{ Champ= LeC }
+	}
+}
+
+{ CalculXX2=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfMaTC }
+			{ Passe= 2 }
+			{ p= 1.5 }
+			{ NbChampSolution= 3 }
+			{ ChampSolution= LeC ErreurP1 ErreurL1 }
+			{ OperationsP1=
+				{ NbChampsP1= 2 }
+				{ Numero= 0 1 }
+				{ Initialise= 0.0 0.0 0.0 }
+				{ Operateur= += += }
+				{ Moyenner= 0 0 }
+			}
+			{ NbChampParametre= 3 }
+			{ ChampParametre= Gradient2P1 ErrRegP0 hMin }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Gradient2P1 }
+		{ Champ= ErrRegP0 }
+		{ Champ= hMin }
+	}
+	{ DependanceModifiable=
+		{ Champ= LeC }
+		{ Champ= ErreurP1 }
+		{ Champ= ErreurL1 }
+	}
+}
+
+{ LeLec=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISSomme }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= LaC }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= ErreurP1 }
+			{ Operations=
+				{ NbChampsATraiter= 1 }
+				{ Numero= 0 }
+				{ Initialise= Zero }
+				{ Moyenner= 0 }
+			}
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= ErreurP1 }
+		{ Champ= Zero }
+	}
+	{ DependanceModifiable=
+		{ Champ= LaC }
+	}
+}
+
+{ CalculXX3=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfMaTC }
+			{ Passe= 3 }
+			{ p= 1.5 }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= MeTCP1 ComptP1 }
+			{ OperationsP1=
+				{ NbChampsP1= 2 }
+				{ Numero= 0 1 }
+				{ Initialise= 0.0 0 }
+				{ Operateur= += += }
+				{ Moyenner= 0 0 }
+			}
+			{ NbChampParametre= 6 }
+			{ ChampParametre= Gradient2P1 LaC NbElements ErrRegP0 hMin sMax }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Gradient2P1 }
+		{ Champ= LaC }
+		{ Champ= LeC }
+		{ Champ= NbElements }
+		{ Champ= ErrRegP0 }
+		{ Champ= hMin }
+		{ Champ= sMax }
+	}
+	{ DependanceModifiable=
+		{ Champ= MeTCP1 }
+		{ Champ= ComptP1 }
+	}
+}
+
+{ GradA2=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISMaTC }
+			{ Passe= 2 }
+			{ Dimension: dimension/dim.txt }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= MeTCP1 ErreurP1 }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= ComptP1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= ComptP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= MeTCP1 }
+		{ Champ= ErreurP1 }
+	}
+}
+
+{ IntegreErreur=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ Boucle= Volume }
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfIntegre }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= ErreurP0 }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= ErreurP1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= ErreurP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= ErreurP0 }
+	}
+}
+
+{ ErreurL1=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ Boucle= Volume }
+		{ ItemSolveur=
+			{ Type= ISSomme }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= ErreurL1 }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= ErreurP0 }
+			{ Operations=
+				{ NbChampsATraiter= 1 }
+				{ Numero= 0 }
+				{ Initialise= Zero }
+				{ Moyenner= 0 }
+			}
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= ErreurP0 }
+		{ Champ= Zero }
+	}
+	{ DependanceModifiable=
+		{ Champ= ErreurL1 }
+	}
+}

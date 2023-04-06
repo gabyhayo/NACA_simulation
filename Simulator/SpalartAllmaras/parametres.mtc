@@ -1,0 +1,59 @@
+{ SpalartAllmarasParametresP0C=
+	{ Type= ModeleConstant }
+	{ Data=
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= Cv1Pow3 }					{ Data= ValeurItem 1 357.911 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= ExpMaxSA }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= EpsLimiteurSA }			{ Data= ValeurItem 1 0 }}
+                { Champ={ Type= P0C_Scalaire_Par }{ Nom= NuTildeInFluide }                           { Data= ValeurItem 1 0 }}
+                { Champ={ Type= P0C_Scalaire_Par }{ Nom= NuTildeInSolide }                           { Data= ValeurItem 1 0 }}
+                { Champ={ Type= P0C_Scalaire_Par }{ Nom= NuTildeInFluidePow3 }                 { Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= NNinfSA }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= NuRatio }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= NuTildeMin }				{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= SmoothRatioMaxSA }			{ Data= ValeurItem 1 0 }}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+{ SpalartAllmarasParametresP0=
+	{ Type= ModeleConstant }
+	{ Data=
+		{ Champ={ Type= P0_Vecteur_Par }{ Nom= GradNuTildeP0 }				{ Data: dimension/vecteur.txt }}
+		
+		{ Champ={ Type= P0_Tenseur_Par }{ Nom= OmegaVitesseP0 }					{ Data: dimension/tenseur.txt }}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+{ SpalartAllmarasParametresP1=
+	{ Type= ModeleConstant }
+	{ Data=
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= BCNuTildeImposeeP1 }		{ Data= ValeurItem 1 1 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= BCNuTildeLibreP1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= DampP1 }					{ Data= ValeurItem 1 1 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= denvP1 }					{ Data= ValeurItem 1 1 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= DiffusionP1SA }				{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= NuTildeP1 }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= NuTildeInP1 }				{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= NuTildeMoinsP1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= NuTildeMoins2P1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= NuTildeMoins3P1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= NuTildeMoins4P1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= NuTildeOutP1 }				{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= ReactionP1SA }				{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= SourceP1SA }				{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= WhereSmoothP1SA }			{ Data= ValeurItem 1 0 }}
+		
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= ConvectionP1SA }				{ Data: dimension/vecteur.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= GradNuTildeP1 }				{ Data: dimension/vecteur.txt }}
+		
+		{ Champ={ Type= P1_Tenseur_Par }{ Nom= OmegaVitesseP1 }				{ Data: dimension/tenseur.txt }}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}

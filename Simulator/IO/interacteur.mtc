@@ -1,0 +1,44 @@
+{ Interacteur=
+	{ Type= ModeleInteracteur }
+	{ IHM= IHM.mtc }
+	{ DependanceModifiable=
+		{ Champ= PrecisionFrontieres }
+		
+		{ Champ= MuFluide }
+		{ Champ= MuSolide }
+		{ Champ= RhoFluide }
+		{ Champ= RhoSolide }
+		
+		{ Champ= RhoRef }
+		{ Champ= VRef }
+		{ Champ= SRef }
+		
+		{ Champ= NuRatio }
+		{ Champ= EpsDistance }
+		
+		{ Champ= PasDeTempsIni }
+		{ Champ= PasDeTempsRun }
+		{ Champ= TempsPasDeTemps }
+		{ Champ= TempsFin }
+		{ Champ= CompteurTemps }
+		{ Champ= FreqVtk }
+		
+		{ Champ= Prompt }
+		{ Champ= Prompteur }
+		
+		{ Champ= NbElements }
+		{ Champ= Nscaling }
+		{ Champ= ScaleNorme }
+		{ Champ= hMin }
+		{ Champ= ErrBox1 }
+		{ Champ= ErrBox2 }
+		{ Champ= ErrBox3 }
+		{ Champ= ErrIn }
+		{ Champ= Lmax }
+		{ Champ= Adaptateur }
+		{ Champ= MinNorme }
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}

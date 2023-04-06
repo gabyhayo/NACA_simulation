@@ -1,0 +1,74 @@
+{ NavierStokesParametresP0C=
+	{ Type= ModeleConstant }
+	{ Data=
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= Ener }						{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= EnerDiff }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= ForceRef }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= MuFluide }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= MuSolide }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= Residu }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= RhoFluide }				{ Data= ValeurItem 1 1 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= RhoSolide }				{ Data= ValeurItem 1 1 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= RhoRef }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= SRef }						{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= UnSurForceRef }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= VRef }						{ Data= ValeurItem 1 0 }}
+		
+		{ Champ={ Type= P0C_Vecteur_Par }{ Nom= Cvect }						{ Data: dimension/vecteur.txt }}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+{ NavierStokesParametresP0=
+	{ Type= ModeleConstant }
+	{ Data=
+		{ Champ={ Type= P0_Scalaire_Par }{ Nom= CxP0 }						{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0_Scalaire_Par }{ Nom= CyP0 }						{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0_Scalaire_Par }{ Nom= CzP0 }						{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0_Scalaire_Par }{ Nom= EnerP0 }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0_Scalaire_Par }{ Nom= EnerDiffP0 }				{ Data= ValeurItem 1 0 }}
+		
+		{ Champ={ Type= P0_Vecteur_Par }{ Nom= CvectP0 }					{ Data: dimension/vecteur.txt }}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+{ NavierStokesParametresP1=
+	{ Type= ModeleConstant }
+	{ Data=
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= BCPressionImposeeP1 }		{ Data= ValeurItem 1 1 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= BCPressionLibreP1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= EnerP1 }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= EnerDiffP1 }				{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= MuP1 }						{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= MuTotP1 }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= PressionP1 }				{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= RhoP1 }						{ Data= ValeurItem 1 1 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= VxInP1 }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= VyInP1 }					{ Data= ValeurItem 1 0 }}
+
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= BCVitesseImposeeP1 }			{ Data: dimension/vecteur_un.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= BCVitesseLibreP1 }			{ Data: dimension/vecteur.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= BCVyImposeeP1 }				{ Data: dimension/vecteur_ey.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= BCVzImposeeP1 }				{ Data: dimension/vecteur_ez.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= CxVecteurP1 }				{ Data: dimension/vecteur_ex.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= CyVecteurP1 }				{ Data: dimension/vecteur_ey.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= CzVecteurP1 }				{ Data: dimension/vecteur_ez.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= DebitnormVecteurP1 }			{ Data: dimension/vecteur.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= exVecteurP1 }				{ Data: dimension/vecteur_ex.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= eyVecteurP1 }				{ Data: dimension/vecteur_ey.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= ezVecteurP1 }				{ Data: dimension/vecteur_ez.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= VitesseP1 }					{ Data: dimension/vecteur.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= VitesseConvectionP1 }		{ Data: dimension/vecteur.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= VitesseInP1 }				{ Data: dimension/vecteur.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= VitesseObjetP1 }				{ Data: dimension/vecteur.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= VitesseMoinsP1 }				{ Data: dimension/vecteur.txt }}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}

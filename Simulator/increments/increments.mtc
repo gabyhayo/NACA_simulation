@@ -1,0 +1,98 @@
+{ Increments=
+	{ Type= ModeleIncremental }
+	{ Data=
+		{ NomCompteur= CompteurTemps }
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ ModeleAvantDebut= Initialisateur }
+		{ ModeleIncrement= CorpsInc }
+		{ ModeleTerminaison= Fin }
+	}
+	{ DependanceModifiable=
+		{ Champ= CompteurTemps }
+	}
+}
+
+{ Initialisateur=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= Interacteur }
+		{ Modele= Geometres }
+		
+		{ Modele= Melange }
+		
+		{ Modele= PrepareDragLift }
+		
+		{ Modele= CalcInNS }
+		{ Modele= CalcInSA }
+		
+		{ Modele= InitNS }
+		{ Modele= InitSA }
+		
+		{ Modele= Reprise }
+		{ Modele= CalcMuTot }
+		
+		{ Modele= UpdateNS }
+		{ Modele= UpdateSA }
+		
+		{ Modele= InitPasDeTemps }
+		
+		{ Modele= BCNS }
+		{ Modele= BCSA }
+		
+		{ Modele= Sorties }
+	}
+}
+
+{ CorpsInc=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= GestionTemps }
+		
+		{ Modele= Interacteur }
+		{ Modele= Melange }
+		
+		{ Modele= CheckTemps }
+		
+		{ Modele= SolveNS }
+		{ Modele= SolveSA }
+		
+		{ Modele= DragLift }
+		{ Modele= Capteurs }
+		
+		{ Modele= UpdateNS }
+		{ Modele= UpdateSA }
+		
+		{ Modele= BCNS }
+		{ Modele= BCSA }
+
+		{ Modele= Sorties }
+	}
+}
+{ Fin=															// on sort si T = Tfin
+	{ Type= ModeleFinSurTemps }
+	{ Data=
+		{ NomTemps= Temps }
+		{ NomTempsFin= TempsFin }
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Temps }
+		{ Champ= TempsFin }
+	}
+}
+{ GestionTemps=													// T=T+dt jusqu'au T=Tfin
+	{ Type= ModeleTemporel }
+	{ Data=
+		{ NomTemps= Temps }
+		{ NomPasDeTemps= PasDeTemps }
+	}
+	{ DependanceModifiable=
+		{ Champ= Temps }
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= PasDeTemps }
+	}
+}

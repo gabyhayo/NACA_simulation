@@ -1,0 +1,18 @@
+{ IncrementsParametresP0C=
+	{ Type= ModeleConstant }
+	{ Data=
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= CompteurTemps }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= CondPasDeTemps }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= DeuxPasDeTemps }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= IsPasDeTemps }				{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= PasDeTemps }				{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= PasDeTempsIni }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= PasDeTempsRun }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= Temps }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= TempsFin }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= TempsPasDeTemps }			{ Data= ValeurItem 1 0 }}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}

@@ -1,0 +1,86 @@
+{ BCNS=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= BCInNS }
+		{ Modele= BCObjetNS }
+		{ Modele= BCNavierStokes }
+	}
+}
+
+{ BCNavierStokes=
+	{ Type= ModeleCLSurGeometres }
+	{ Data=
+		{ Entite= NOEUDS }
+		
+		{ ConditionLimite=
+			{ Nom= Inlet }
+			{ Type= CLDirichlet }
+			{ Appartient= AppartientInP1 }
+			{ NbChamps= 2 }
+			{ Degres= BCVitesseImposeeP1 BCPressionLibreP1 }
+			{ Valeurs= VitesseInP1 ZeroP1 }
+			{ Priorite= 3 }
+		}
+		
+		{ ConditionLimite=
+			{ Nom= Bottom }
+			{ Type= CLDirichlet }
+			{ Appartient= AppartientBottomP1 }
+			{ NbChamps= 2 }
+			{ Degres= BCVyImposeeP1 BCPressionLibreP1 }
+			{ Valeurs= ZeroVecteurP1 ZeroP1 }
+			{ Priorite= 2 }
+		}
+		
+		{ ConditionLimite=
+			{ Nom= Outlet }
+			{ Type= CLDirichlet }
+			{ Appartient= AppartientOutP1 }
+			{ NbChamps= 2 }
+			{ Degres= BCVitesseLibreP1 BCPressionLibreP1 }
+			{ Valeurs= ZeroVecteurP1 ZeroP1 }
+			{ Priorite= 1 }
+		}
+		
+		{ ConditionLimite=
+			{ Nom= Top }
+			{ Type= CLDirichlet }
+			{ Appartient= AppartientTopP1 }
+			{ NbChamps= 2 }
+			{ Degres= BCVyImposeeP1 BCPressionLibreP1 }
+			{ Valeurs= ZeroVecteurP1 ZeroP1 }
+			{ Priorite= 2 }
+		}
+		
+		{ ConditionLimite=
+			{ Nom= Objet }
+			{ Type= CLDirichlet }
+			{ Appartient= AppartientObjetP1 }
+			{ NbChamps= 2 }
+			{ Degres= BCVitesseImposeeP1 BCPressionLibreP1 }
+			{ Valeurs= VitesseObjetP1 ZeroP1 }
+			{ Priorite= 3 }
+		}
+	}
+	
+	{ Precision= PrecisionFrontieres }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= AppartientInP1 }
+		{ Champ= AppartientBottomP1 }
+		{ Champ= AppartientOutP1 }
+		{ Champ= AppartientTopP1 }
+		{ Champ= AppartientObjetP1 }
+		{ Champ= BordNoeudP1 }
+		{ Champ= PrecisionFrontieres }
+		{ Champ= BCVitesseImposeeP1 }
+		{ Champ= BCVitesseLibreP1 }
+		{ Champ= BCVyImposeeP1 }
+		{ Champ= BCPressionImposeeP1 }
+		{ Champ= BCPressionLibreP1 }
+		{ Champ= VitesseInP1 }
+		{ Champ= VitesseObjetP1 }
+		{ Champ= ZeroVecteurP1 }
+		{ Champ= ZeroP1 }
+	}
+}

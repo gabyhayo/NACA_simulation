@@ -1,0 +1,94 @@
+{ DeLaFonction=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= MelangeErr }
+		{ Modele= MelangeErr2 }
+		{ Modele= MelangeErr3 }
+		{ Modele= UpLoad }
+		{ Modele= Associateur }
+	}
+}
+
+{ MelangeErr=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfMelange2Champs }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= ErrRegP0 }
+			{ NbChampParametre= 3 }
+			{ ChampParametre= LevelSetBox23P1Filtree ErrBox2 ErrBox3 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= LevelSetBox23P1Filtree }
+		{ Champ= ErrBox3 }
+		{ Champ= ErrBox2 }
+	}
+	{ DependanceModifiable=
+		{ Champ= ErrRegP0 }
+	}
+}
+
+{ MelangeErr2=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfMelange2Champs }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= ErrRegP0 }
+			{ NbChampParametre= 3 }
+			{ ChampParametre= LevelSetBox12P1Filtree ErrBox1 ErrRegP0 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= LevelSetBox12P1Filtree }
+		{ Champ= ErrBox1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= ErrRegP0 }
+	}
+}
+
+{ MelangeErr3=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfMelange2Champs }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= ErrRegP0 }
+			{ NbChampParametre= 3 }
+			{ ChampParametre= LevelSetObjetP1Filtree ErrIn ErrRegP0 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= LevelSetObjetP1Filtree }
+		{ Champ= ErrIn }
+	}
+	{ DependanceModifiable=
+		{ Champ= ErrRegP0 }
+	}
+}
+
+{ UpLoad=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= LevelSetObjetP1Filtree }
+		{ Champ= Lmax }
+		{ Champ= VitesseP1 }
+		{ Champ= MuP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= UnVecteurP1 }
+		{ Champ= UneFonctionP1 }
+	}
+	
+	{ Operation= UneFonctionP1 = LevelSetObjetP1Filtree }
+	{ Operation= UneFonctionP1 /= Lmax }
+	{ Operation= UnVecteurP1 = VitesseP1 }
+	{ Operation= UnVecteurP1 *= MuP1 }
+}

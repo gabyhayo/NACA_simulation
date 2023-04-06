@@ -1,0 +1,127 @@
+{ CalcVolume=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= CalcVolumeP0 }
+		{ Modele= IntegreVolume }
+		{ Modele= CalcMeshSizeP0 }
+		{ Modele= CalcMeshSizeP1 }
+		{ Modele= CalcMeshSizeMin }
+	}
+}
+
+{ CalcVolumeP0=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfVolume }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= VolumeP0 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+	{ DependanceModifiable=
+		{ Champ= VolumeP0 }
+	}
+}
+
+{ IntegreVolume=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		 Boucle= Volume 
+		{ ItemSolveur=
+			{ Type= ISSomme }
+			{ Operations=
+				{ NbChampsATraiter= 1 }
+				{ Numero= 0 }
+				{ Initialise= Zero }
+			}
+			{ NbChampSolution= 1 }
+			{ ChampSolution= Volume }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= VolumeP0 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Zero }
+		{ Champ= VolumeP0 }
+	}
+	{ DependanceModifiable=
+		{ Champ= Volume }
+	}
+}
+
+{ CalcMeshSizeP0=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfArete }
+			{ TypeDArete= moy }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= MeshSizeP0 }
+ 		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+	{ DependanceModifiable=
+		{ Champ= MeshSizeP0 }
+	}
+}
+
+{ CalcMeshSizeP1=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfTest }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= MeshSizeP1 }
+			{ OperationsP1=
+				{ NbChampsP1= 1 }
+				{ Numero= 0 }
+				{ Initialise= 0.0 }
+				{ Moyenner= 1 }
+				{ Operateur= += }
+			}
+			{ NbChampParametre= 1 }
+			{ ChampParametre= MeshSizeP0 }
+		}
+		{ Boucle= Volume }
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= MeshSizeP0 }
+	}
+	{ DependanceModifiable=
+		{ Champ= MeshSizeP1 }
+	}
+}
+
+{ CalcMeshSizeMin=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		 Boucle= Volume 
+		{ ItemSolveur=
+			{ Type= ISMin }
+			{ Operations=
+				{ NbChampsATraiter= 1 }
+				{ Numero= 0 }
+				{ Initialise= PlusInfini }
+			}
+			{ NbChampSolution= 1 }
+			{ ChampSolution= MeshSizeMin }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= MeshSizeP1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= PlusInfini }
+		{ Champ= MeshSizeP1 }
+	}
+	{ DependanceModifiable=
+		{ Champ= MeshSizeMin }
+	}
+}

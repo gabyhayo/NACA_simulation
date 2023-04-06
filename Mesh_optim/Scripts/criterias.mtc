@@ -1,0 +1,344 @@
+
+{ ComputeAlphInc=
+    { Type= ModeleArithmetique }
+    { Dependance= 
+        { Maillage= MaillagePrincipal }
+ 
+		{ Champ= One }  
+        { Champ= MaxIterations } 
+    }
+    { DependanceModifiable=  
+
+        { Champ= Alphainc }  
+    }
+    { Operation= Alphainc = One }
+    { Operation= Alphainc /= MaxIterations }
+
+   
+}
+
+{ TestingMeshSize= 
+	{ Type= ModeleDeModeles }
+   	{ Data=
+        { Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= CoefficientNA }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Alpha }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Alphainc }
+			{ Data= ValeurItem 1 0.1 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Power }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= GetPower }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= IterativeProcedure }
+			{ Data= ValeurItem 1 0 }
+	   	}		
+	}
+	{ Dependance=  
+        { Maillage= MaillagePrincipal }
+       	
+        { Modele= UpdateMeshsizeInitally }
+        { Modele= ComputeMinMeshSize }
+        { Modele= TestMinMeshsize }
+        { Modele= AdaptIf } 	
+       
+	}
+}
+
+{ UpdateMeshsizeInitally=
+   { Type= ModeleConditionnel }
+   { Dependance=
+      { Maillage= MaillagePrincipal }
+      { ChampCondition= IterativeProcedure }
+      { ModeleFalse= Double }
+      { ModeleTrue= SquareRoot }
+   }
+}
+
+{ SquareRoot=
+    { Type= ModeleArithmetique }
+    { Dependance= 
+        { Maillage= MaillagePrincipal }
+     
+        { Champ= Facteur0 }
+		{ Champ= Zero } 
+		{ Champ= Half } 
+		{ Champ= Un } 
+		{ Champ= Deux } 
+		{ Champ= Alphainc } 
+     
+    }
+    { DependanceModifiable= 
+        { Champ= Meshsize }  
+		{ Champ= MaxMesh2 }  
+        { Champ= MaxMesh3 }  
+        { Champ= Meshsize2 }  
+        { Champ= Meshsize3 } 			
+        { Champ= Meshsizebis } 			
+        { Champ= Alpha } 			
+        { Champ= Power } 			
+        { Champ= GetPower } 			
+        { Champ= Hbox1MAx } 			
+
+    }
+    { Operation= Meshsizebis = Meshsize }
+    { Operation= Hbox1MAx = Meshsize }
+    { Operation= Power = Deux }
+    { Operation= Power -= Alpha }
+    { Operation= GetPower = Un }
+    { Operation= GetPower /= Power }
+    { Operation= Meshsizebis **= GetPower }
+    { Operation= Meshsize = Meshsizebis }
+     Operation= Meshsize *= Facteur0 
+     { Operation= MaxMesh2 = Zero } 
+     { Operation= MaxMesh3 = Zero } 
+}
+
+
+{ Double=
+    { Type= ModeleArithmetique }
+    { Dependance= 
+        { Maillage= MaillagePrincipal }
+     
+        { Champ= Facteur0 }
+		{ Champ= Zero } 
+		{ Champ= Half } 
+		{ Champ= Un } 
+		{ Champ= Deux } 
+		{ Champ= Alphainc } 
+     
+    }
+    { DependanceModifiable= 
+        { Champ= Meshsize }  
+		{ Champ= MaxMesh2 }  
+        { Champ= MaxMesh3 }  
+        { Champ= Meshsize2 }  
+        { Champ= Meshsize3 } 			
+        { Champ= Meshsizebis } 			
+        { Champ= Alpha } 			
+        { Champ= Power } 			
+        { Champ= GetPower } 			
+        { Champ= Hbox1MAx } 			
+
+    }
+    { Operation= Meshsizebis = Meshsize }
+    { Operation= Hbox1MAx = Meshsize }
+    { Operation= Power = Deux }
+    { Operation= Power -= Alpha }
+    { Operation= GetPower = Un }
+    { Operation= GetPower /= Power }
+    { Operation= Meshsizebis *= Power } // changed here
+    { Operation= Meshsize = Meshsizebis }
+     Operation= Meshsize *= Facteur0 
+     { Operation= MaxMesh2 = Zero } 
+     { Operation= MaxMesh3 = Zero } 
+}
+
+
+{ ComputeMinMeshSize=
+   { Type= ModeleParticulaire }
+   { Data=
+      { Champ=
+         { Type= P0C_Scalaire_Par }
+         { Nom= ObtainedMinSize }
+         { Data= ValeurItem 1 0.0 }
+      }
+	  { Champ=
+         { Type= P0C_Scalaire_Par }
+         { Nom= PlusInfinity }
+         { Data= ValeurItem 1 10000 }
+      }
+    
+      { ItemSolveur=
+         { Type= ISMin }
+         { Operations=
+            { NbChampsATraiter= 1 }
+            { Numero= 0 }
+            { Initialise= PlusInfinity }
+         }
+         { NbChampSolution= 1 }
+         { ChampSolution= ObtainedMinSize }
+         { NbChampParametre= 1 }
+         { ChampParametre= Meshsize }
+      }
+   }
+   { Dependance=
+      { Maillage= MaillagePrincipal }
+      { Champ= PlusInfinity }
+      { Champ= Meshsize }
+   }
+}
+{ TestMinMeshsize=
+    { Type= ModeleArithmetique }
+    { Dependance= 
+        { Maillage= MaillagePrincipal }    
+		{ Champ= Hbox1 }       
+		{ Champ= Zero }       
+    }
+    { DependanceModifiable= 
+        { Champ= ObtainedMinSize } 
+        { Champ= CoefficientNA } 
+    }
+    { Operation= CoefficientNA = ObtainedMinSize }
+    { Operation= CoefficientNA <? Hbox1 }
+    
+}
+
+{ AdaptIf=
+   { Type= ModeleConditionnel }
+   { Dependance=
+      { Maillage= MaillagePrincipal }
+      { ChampCondition= CoefficientNA }
+      { ModeleFalse= UpdateFactor }
+      { ModeleTrue= Finish }
+   }
+}
+
+{ UpdateFactor=
+    { Type= ModeleArithmetique }
+    { Dependance= 
+        { Maillage= MaillagePrincipal }
+        { Champ= Facteur }
+        { Champ= Alphainc }
+    }
+    { DependanceModifiable= 
+        { Champ= Facteur0 }  
+        { Champ= Alpha }  
+    }
+	{ Operation= Facteur0 *= Facteur }
+	 { Operation= Alpha += Alphainc }
+ 
+}
+
+{ Finish=
+    { Type= ModeleDeModeles }
+      { Dependance= 
+        
+      { Maillage= MaillagePrincipal }
+   
+        
+      { Modele= UpdateIncrements }
+      { Modele= Sorties4 }
+       Modele= Sorties   
+    }
+}
+
+{ UpdateIncrements=
+    { Type= ModeleArithmetique }
+    { Dependance= 
+        { Maillage= MaillagePrincipal }
+        { Champ= MaxIterations }
+    }
+    { DependanceModifiable= 
+        { Champ= Temps }  
+    }
+	 { Operation= Temps = MaxIterations }
+ 
+}
+
+// ******************* initial factor ***********************
+
+
+{ TargetFactor= 
+	{ Type= ModeleDeModeles }
+   	{ Data=
+        { Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= CoefficientNAA }
+			{ Data= ValeurItem 1 0 }
+	   	}	
+	}
+	{ Dependance=  
+        { Maillage= MaillagePrincipal } 	
+        { Modele= ComputeAllMeshsize }
+        { Modele= AverageMeshsize }
+        { Modele= ComputeInitialFactor }
+       
+	}
+}
+
+
+{ ComputeAllMeshsize=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ Champ= 
+		    { Type= P0_Scalaire_Par }
+			{ Nom= hTetra }
+			{ Data= ValeurItem 1 0.0 }
+		}
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfArete }
+            { TypeDArete= moy }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= hTetra }
+ 		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= hTetra }
+
+	}
+}
+{ AverageMeshsize=
+        { Type= ModeleParticulaire }
+        { Data=
+           { Champ= 
+		    { Type= P0C_Scalaire_Par }
+			{ Nom= AverageMeshsize }
+			{ Data= ValeurItem 1 0.0 }
+		}
+
+		 { ItemSolveur=
+                        { Type= ISSomme }
+                        { NbChampSolution= 1 }
+                        { ChampSolution= AverageMeshsize }
+                        { NbChampParametre= 1 }
+                        { ChampParametre= hTetra }
+				{ Operations= 
+					{ Moyenner= 1 }
+				}
+		 }
+        }
+        { Dependance=
+                { Maillage= MaillagePrincipal }
+                { Champ= hTetra }
+        }
+        { DependanceModifiable= 
+	          { Champ= AverageMeshsize }
+    	  }
+}
+
+{ ComputeInitialFactor=
+    { Type= ModeleArithmetique }
+    { Dependance= 
+        { Maillage= MaillagePrincipal }    
+		{ Champ= AverageMeshsize }       
+		{ Champ= Hbox2 }       
+		{ Champ= One }       
+    }
+    { DependanceModifiable= 
+        { Champ= Facteur0 } 
+    }
+    { Operation= Facteur0 = AverageMeshsize }
+    { Operation= Facteur0 /= Hbox2 }
+	
+    { Operation= Facteur0 > One }
+    
+}

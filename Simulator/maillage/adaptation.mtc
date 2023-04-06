@@ -1,0 +1,40 @@
+{ Adaptateur=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= Trigger }
+		{ Modele= AdapteSi }
+	}
+}
+
+{ AdapteSi=
+	{ Type= ModeleConditionnel }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ ChampCondition= Adapte }
+		{ ModeleFalse= Adaptation }
+	}
+}
+
+{ Adaptation=
+	{ Type= ModeleDeModeles }
+	{ Dependance=
+		{ Modele= MetriqueGenerale }
+		 Modele= SortiesMTC 
+		{ Modele= MaillagePrincipal }
+	}
+}
+
+{ Trigger=
+	{ Type= ModeleArithmetique }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= CompteurTemps }
+		{ Champ= Adaptateur }
+	}
+	{ DependanceModifiable=
+		{ Champ= Adapte }
+	}
+	
+	{ Operation= Adapte = CompteurTemps }
+	{ Operation= Adapte %= Adaptateur }
+}

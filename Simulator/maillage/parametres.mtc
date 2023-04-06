@@ -1,0 +1,72 @@
+{ MaillageParametresP0C=
+	{ Type= ModeleConstant }
+	{ Data=
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= Adaptateur }				{ Data= ValeurItem 1 20 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= Adapte }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= ErrIn }					{ Data= ValeurItem 1 1 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= ErrBox1 }					{ Data= ValeurItem 1 1 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= ErrBox2 }					{ Data= ValeurItem 1 1 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= ErrBox3 }					{ Data= ValeurItem 1 1 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= ErreurL1 }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= hMin }						{ Data= ValeurItem 1 0.001 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= LaC }						{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= LaMarge }					{ Data= ValeurItem 1 10 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= LeC }						{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= lemax }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= Marge }					{ Data= ValeurItem 1 50 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= MinNorme }					{ Data= ValeurItem 1 0.0000001 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= nbC }						{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= NbComposantes }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= NbElements }				{ Data= ValeurItem 1 4000 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= Nscaling }					{ Data= ValeurItem 1 5 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= ScaleNorme }				{ Data= ValeurItem 1 1 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= sMax }						{ Data= ValeurItem 1 8 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= ZO }						{ Data= ValeurItem 1 0 }}
+		
+		{ Champ={ Type= P0C_Vecteur_Par }{ Nom= ZeroVecteurTG }				{ Data: dimension/vecteur_TG.txt }}
+		{ Champ={ Type= P0C_Vecteur_Par }{ Nom= ZeroVecteur }				{ Data: dimension/vecteur.txt }}
+		{ Champ={ Type= P0C_Vecteur_Par }{ Nom= ZeroVecteurG }				{ Data: dimension/vecteur_G.txt }}
+		
+		{ Champ={ Type= P0C_Tenseur_Par }{ Nom= ZeroTenseur }				{ Data: dimension/tenseur.txt }}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+{ MaillageParametresP0=
+	{ Type= ModeleConstant }
+	{ Data=
+		{ Champ={ Type= P0_Scalaire_Par }{ Nom= ErrRegP0 }					{ Data= ValeurItem 1 0.0001 }}
+		{ Champ={ Type= P0_Scalaire_Par }{ Nom= ErreurP0 }			{ Data= ValeurItem 1 0 }}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+
+{ MaillageParametresP1=
+	{ Type= ModeleConstant }
+	{ Data=
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= axxP1 }						{ Data= ValeurItem 1 0.00001 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= ComptP1 }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= ErreurP1 }					{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= normeUnVecteurP1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= LaFonctionP1 }				{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= UneFonctionP1 }				{ Data= ValeurItem 1 0 }}
+		
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= GradientP1 }					{ Data: dimension/vecteur.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= Gradient2P1 }				{ Data: dimension/vecteur_TG.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= LeVecteurP1 }				{ Data: dimension/vecteur_G.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= UnVecteurP1 }				{ Data: dimension/vecteur.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= UXP1 }						{ Data: dimension/vecteur.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= UX2P1 }						{ Data: dimension/vecteur_TG.txt }}
+		
+		{ Champ={ Type= P1_Tenseur_Par }{ Nom= MeTCP1 }						{ Data: dimension/tenseur.txt }}
+		{ Champ={ Type= P1_Tenseur_Par }{ Nom= XXP1 }						{ Data: dimension/tenseur.txt }}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}

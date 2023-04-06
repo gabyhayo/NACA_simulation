@@ -1,0 +1,53 @@
+
+{ Parametres= 
+    { Type= ModeleConstant }
+    { Data= 
+      
+        { Champ= 
+            { Type= P0C_Scalaire_Par }
+            { Nom= PrecisionFrontieres }
+            { Data= ValeurItem 1 0.00001 }         // 0.0000001                 
+		}
+		{ Champ= 
+            { Type= P0C_Scalaire_Par }
+            { Nom= Deux }
+            { Data= ValeurItem 1 2 }   // 4                       
+		}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= One }
+			{ Data= ValeurItem 1 1 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Trois }
+			{ Data= ValeurItem 1 3 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Zero }
+			{ Data= ValeurItem 1 0 }
+	   	}		
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= MOne }
+			{ Data= ValeurItem 1 -1 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Half }
+			{ Data= ValeurItem 1 0.5 }
+	   	}
+        { Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Geo }
+			{ Data= ValeurItem 1 0 }
+	   	}
+
+    }
+		
+    { Dependance= 
+        { Maillage= MaillagePrincipal }
+
+    }
+}

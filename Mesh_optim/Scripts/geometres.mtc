@@ -1,0 +1,496 @@
+{ BoxOrSurfacePerso=
+   { Type= ModeleConditionnel }
+   { Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ ChampCondition= Box }
+		{ ModeleTrue= InitialisationBox }
+		{ ModeleFalse= Objet }
+   }
+}
+
+{ InitialisationBox=
+    { Type= ModeleDeModeles }
+	{ Data=
+	}
+    { Dependance= 
+        
+		{ Maillage= MaillagePrincipal }
+
+		{ Modele= Repere2 }
+	    { Modele= Geo2 }
+	    { Modele= Distance2 }
+		{ Modele= RepereG } 
+		{ Modele= GeoBrique } 
+		{ Modele= DistanceBox }
+		{ Modele= ComputeMeshsizeBox }
+	    { Modele= SortiesBox }
+		{ Modele= MaillagePrincipal }
+		{ Modele= MaillagePrincipal }
+		
+	    { Modele= Distance2 }
+		{ Modele= DistanceBox }
+		{ Modele= ComputeMeshsizeBox }
+		{ Modele= IncrementeCompteurBox }
+	    { Modele= SortiesBox }
+		{ Modele= MaillagePrincipal }
+		{ Modele= MaillagePrincipal }
+		
+	    { Modele= Distance2 }
+		{ Modele= DistanceBox }
+		{ Modele= ComputeMeshsizeBox }
+		{ Modele= IncrementeCompteurBox }
+	    { Modele= SortiesBox }
+		{ Modele= MaillagePrincipal }
+		{ Modele= MaillagePrincipal }
+		
+	    { Modele= Distance2 }
+		{ Modele= DistanceBox }
+		{ Modele= ComputeMeshsizeBox }
+		{ Modele= IncrementeCompteurBox }
+	    { Modele= SortiesBox }
+		{ Modele= MaillagePrincipal }
+		{ Modele= MaillagePrincipal }
+		
+	    { Modele= Distance2 }
+		{ Modele= DistanceBox }
+		{ Modele= ComputeMeshsizeBox }
+		{ Modele= IncrementeCompteurBox }
+	    { Modele= SortiesBox }
+		{ Modele= MaillagePrincipal }
+		{ Modele= MaillagePrincipal }
+		
+	    { Modele= Distance2 }
+		{ Modele= DistanceBox }
+		{ Modele= ComputeMeshsizeBox }
+		{ Modele= IncrementeCompteurBox }
+	    { Modele= SortiesBox }
+		{ Modele= MaillagePrincipal }
+		{ Modele= MaillagePrincipal }
+		
+		{ Modele= Calculh }
+		{ Modele= PassageHP0EnHP1 }
+		{ Modele= MinMeshsize }
+		
+		{ Modele= Objet }
+    }
+}
+
+{ Objet=
+    { Type= ModeleDeModeles }
+	{ Data=
+	}
+    { Dependance= 
+        
+		{ Maillage= MaillagePrincipal }
+
+		{ Modele= Repere2 }
+	    { Modele= Geo2 }
+	    { Modele= Distance2 }
+	  
+		{ Modele= Geometrie } 
+    }
+}
+
+{ Repere2=
+	{ Type= ModeleDeMouvements }
+	{ Data=
+		{ Repere=
+			{ Dimension= 2 }
+			{ Nom= R2 }
+			{ Origine: Center2.txt }
+			{ Axes= 1 0 0 1 }
+		}
+	}
+}
+
+{ Geo2=
+	{ Type= ModeleDeGeometres }
+	{ Data=
+		{ Geometre=
+			{ Nom= Box2 }
+			{ Type= GeometreAnalytique }
+			{ Data=
+				{ Forme= 
+					{ Type= Brique }
+					{ Dimension= 2 }
+					{ Data=
+						{ Dimension: Box2.txt }
+					}
+				}
+				{ Repere= R2 }
+			}
+		}
+		
+	}
+	{ Dependance=
+		{ Modele= Repere2 }
+	}
+}
+
+
+{ Distance2=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= LevelSetLayer2 }
+			{ Data= ValeurItem 1 0.0 }                        // ##
+		}
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= Appartient2 }
+			{ Data= ValeurItem 1 0.0 }                        // ##
+		}
+		{ ItemSolveur=
+			{ Type= ISGeometre }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= Appartient2 LevelSetLayer2 }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= Coordonnees PrecisionFrontieres }
+			{ Geometre= Box2 }
+			{ Distance= 1 }
+			{ Appartient= 1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Coordonnees }
+		{ Champ= PrecisionFrontieres }
+	}
+}
+
+
+{ RepereG=
+	{ Type= ModeleDeMouvements }
+	{ Data=
+		{ Repere=
+			{ Dimension= 2 }
+			{ Nom= RG }
+			{ Origine: Center.txt }
+			{ Axes= 1 0 0 1 }
+		}
+	}
+}
+
+{ Geometrie=
+   { Type= ModeleSwitch }
+   { Nom= Geometrie }
+   { Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ ChampCondition= Geo }
+		{ NombreModeles= 3 }
+		
+		{ Modele1= GeoPerso }
+		{ Modele2= GeoSphere }
+		{ Modele3= GeoBrique }
+   }
+}
+
+
+{ GeoPerso=
+    { Type= ModeleDeModeles }
+	{ Data=
+	}
+    { Dependance= 
+        
+		{ Maillage= MaillagePrincipal }
+
+		{ Modele= RepereNaca1 }
+	    { Modele= GeoNaca1 }
+	    { Modele= DistanceNaca1 }
+	  
+		 Modele= RepereNaca2 
+		 Modele= GeoNaca2 
+		 Modele= DistanceNaca2 
+		
+		 Modele= GeoBoth 
+		 Modele= DistanceBoth 
+    }
+}
+
+{ RepereNaca1=
+  { Type= ModeleDeMouvements }
+  { Data=
+    { Repere=
+      { Dimension= 2 } 
+      { Nom= NACA }
+      { Origine= 0 0 } 
+      { Axes= 1 0 0 1 } 
+    }
+	}
+	{ Dependance= 
+		{ Maillage= MaillagePrincipal }
+	}	 
+}
+
+{ GeoNaca1=
+	{ Type= ModeleDeGeometres }
+	{ Data=
+		{ Geometre=
+			{ Nom= ProfilNACA }
+			{ Type= GeometreAnalytique }
+			{ Data=
+				{ Forme=
+					{ Type= FormeNewMaillageBis }
+					{ Data=
+						{ M:  naca.t } 
+						{ Localisation=
+							{ Brique= Boite }
+							{ Methode= Logarithmique }
+							{ TailleMax= 1024 }
+						}
+					}
+				}
+				{ Repere= NACA }
+			}
+		}
+		
+	}
+	{ Dependance=
+    { Maillage= MaillagePrincipal }
+		{ Modele= RepereNaca1 }
+	}
+}
+
+{ DistanceNaca1=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= LevelSetNACA }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= AppartientNACA }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= LevelSetLayer1 }
+			{ Data= ValeurItem 1 0 }
+		}
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= Appartient1 }
+			{ Data= ValeurItem 1 0 }
+		}
+		{ ItemSolveur=
+			{ Type= ISGeometre }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= Appartient1 LevelSetLayer1 }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= Coordonnees PrecisionFrontieres }
+			{ Geometre= ProfilNACA }
+			{ Distance= 1 }
+			{ Appartient= 1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Coordonnees }
+		{ Champ= PrecisionFrontieres }
+	}
+}
+
+{ RepereNaca2=
+  { Type= ModeleDeMouvements }
+  { Data=
+    { Repere=
+      { Dimension= 2 } 
+      { Nom= NACA2 }
+      { Origine= 0 0 } 
+      { Axes= 1 0 0 1 } 
+    }
+	}
+	{ Dependance= 
+		{ Maillage= MaillagePrincipal }
+	}	 
+}
+
+{ GeoNaca2=
+	{ Type= ModeleDeGeometres }
+	{ Data=
+		{ Geometre=
+			{ Nom= ProfilNACA2 }
+			{ Type= GeometreAnalytique }
+			{ Data=
+				{ Forme=
+					{ Type= FormeNewMaillageBis }
+					{ Data=
+						{ M:  naca.t } 
+						{ Localisation=
+							{ Brique= Boite }
+							{ Methode= Lineaire }
+							{ TailleMax= 1024 }
+						}
+					}
+				}
+				{ Repere= NACA2 }
+			}
+		}
+		
+	}
+	{ Dependance=
+    { Maillage= MaillagePrincipal }
+		{ Modele= RepereNaca2 }
+	}
+}
+
+{ DistanceNaca2=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= LevelSetNACA2 }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= AppartientNACA2 }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ ItemSolveur=
+			{ Type= ISGeometre }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= AppartientNACA2 LevelSetNACA2 }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= Coordonnees PrecisionFrontieres }
+			{ Geometre= ProfilNACA2 }
+			{ Distance= 1 }
+			{ Appartient= 1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Coordonnees }
+		{ Champ= PrecisionFrontieres }
+	}
+}
+
+{ GeoBoth= 
+  { Type= ModeleDeGeometres }
+	{ Data=
+		{ Geometre= 
+			{ Nom= Tout }
+			{ Type= GeometreConteneur } 
+			{ Geometre= ProfilNACA } 		
+			{ Geometre= ProfilNACA2 }		
+		}					
+	}
+  { Dependance=
+    { Maillage= MaillagePrincipal }
+		{ Geometre= ProfilNACA } 		
+		{ Geometre= ProfilNACA2 }		
+  }
+}			
+
+{ DistanceBoth=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISGeometre }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= Appartient1 LevelSetLayer1 }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= Coordonnees PrecisionFrontieres }
+			{ Geometre= Tout }
+			{ Distance= 1 }
+			{ Appartient= 1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Coordonnees }
+		{ Champ= PrecisionFrontieres }
+	}
+	{ DependanceModifiable=
+		{ Champ= Appartient1 }
+		{ Champ= LevelSetLayer1 }
+	}
+}
+
+
+{ GeoBrique=
+	{ Type= ModeleDeGeometres }
+	{ Data=
+		{ Geometre=
+			{ Nom= Brique }
+			{ Type= GeometreAnalytique }
+			{ Data=
+				{ Forme=
+					{ Type= Brique }
+					{ Dimension= 2 }
+					{ Data=
+						{ Dimension: dimension.txt }
+					}
+				}
+				{ Repere= RG }
+			}
+		}
+		
+	}
+	{ Dependance=
+		{ Modele= RepereG }
+	}
+}
+
+{ GeoSphere=
+	{ Type= ModeleDeGeometres }
+	{ Data=
+		{ Geometre=
+			{ Nom= Sphere }
+			{ Type= GeometreAnalytique }
+			{ Data=
+				{ Forme=
+					{ Type= Boule }
+					{ Dimension= 2 }
+					{ Data=
+						{ Rayon: dimension.txt }
+					}
+				}
+				{ Repere= RG }
+			}
+		}
+		
+	}
+	{ Dependance=
+		{ Modele= RepereG }
+	}
+}
+
+{ DistanceBox=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= LevelSetLayerBox }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= AppartientBox }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ ItemSolveur=
+			{ Type= ISGeometre }
+			{ NbChampSolution= 2 }
+			{ ChampSolution= AppartientBox LevelSetLayerBox }
+			{ NbChampParametre= 2 }
+			{ ChampParametre= Coordonnees PrecisionFrontieres }
+			{ Geometre= Brique }
+			{ Distance= 1 }
+			{ Appartient= 1 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Coordonnees }
+		{ Champ= PrecisionFrontieres }
+	}
+	{ DependanceModifiable=  
+
+        { Champ= AppartientBox }  
+        { Champ= LevelSetLayerBox } 
+    }
+}

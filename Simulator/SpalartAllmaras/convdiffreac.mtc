@@ -1,0 +1,42 @@
+{ ConvDiffReacSA=
+	{ Type= ModeleElementsFinis }
+	{ Data=
+		{ SolveurLocal=
+			{ Methode=
+				{ Implicite= 1 }
+				{ Diffusion= RFB1 }		//Galerkin, Condsplit, RFB : choix de la methode de resolution pour la diffusion pure
+				{ Convection= SUPG }	//Galerkin, SUPG, SCPG : choix de la methode de resolution pour la convection dominante
+			}
+			{ Type= ConvectionDiffusionReactionP1 }
+			{ Resolution= 4 }
+			{ Preconditionneur= 22 }
+			{ Precision= 1e-9 }
+			{ NbChampParametre= 8 }
+			{ ChampParametre= ConvectionP1SA NuTildeMoinsP1 PasDeTemps SourceP1SA DiffusionP1SA Un ReactionP1SA NuTildeMoins2P1 }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= NuTildeP1 }
+		}
+		{ Solveur=
+			{ Type= SolveurLineaire }
+			{ TypeDeNorme= 1 }
+			{ Precision= 1e-9 }
+			{ PrecisionRelative= 1e-14 }
+			{ NbIterMaxLineaire= 3000 }
+		}
+	}
+	{ Dependance=
+		{ Champ= NuTildeMoinsP1 }
+		{ Champ= NuTildeMoins2P1 }
+		{ Champ= ConvectionP1SA }
+		{ Champ= DiffusionP1SA }
+		{ Champ= ReactionP1SA }
+		{ Champ= SourceP1SA }
+		{ Champ= PasDeTemps }
+		{ Champ= Un }
+		{ Maillage= MaillagePrincipal }
+		{ ModeleCL= BCNuTilde }
+	}
+	{ DependanceModifiable=
+		{ Champ= NuTildeP1 }
+	}
+}

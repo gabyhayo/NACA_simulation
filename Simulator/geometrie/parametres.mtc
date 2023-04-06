@@ -1,0 +1,65 @@
+{ GeometrieParametresP0C=
+	{ Type= ModeleConstant }
+	{ Data=
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= EpaisseurMelange }			{ Data= ValeurItem 1 0.0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= MeshSizeMin }				{ Data= ValeurItem 1 0.0 }}
+		{ Champ={ Type= P0C_Scalaire_Par }{ Nom= Volume }					{ Data= ValeurItem 1 0 }}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+{ GeometrieParametresP0=
+	{ Type= ModeleConstant }
+	{ Data=
+		{ Champ={ Type= P0_Scalaire_Par }{ Nom= MeshSizeP0 }				{ Data= ValeurItem 1 0.0 }}
+		{ Champ={ Type= P0_Scalaire_Par }{ Nom= VolumeP0 }					{ Data= ValeurItem 1 0 }}
+		
+		{ Champ={ Type= P0_Vecteur_Par }{ Nom= NormaleP0 }					{ Data: dimension/vecteur.txt }}
+		{ Champ={ Type= P0_Vecteur_Par }{ Nom= NormaleObjetDistP0 }			{ Data: dimension/vecteur.txt }}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}
+
+{ GeometrieParametresP1=
+	{ Type= ModeleConstant }
+	{ Data=
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= AppartientBackP1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= AppartientBottomP1 }		{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= AppartientBox12P1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= AppartientBox23P1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= AppartientControleP1 }		{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= AppartientEdgeP1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= AppartientFrontP1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= AppartientInP1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= AppartientMelangeP1 }		{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= AppartientNoControleP1 }	{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= AppartientObjetP1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= AppartientOutP1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= AppartientTopP1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= LevelSetBackP1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= LevelSetBottomP1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= LevelSetBox12P1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= LevelSetBox12P1Filtree }	{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= LevelSetBox23P1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= LevelSetBox23P1Filtree }	{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= LevelSetEdgeP1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= LevelSetFrontP1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= LevelSetInP1 }				{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= LevelSetObjetP1 }			{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= LevelSetObjetP1Filtree }	{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= LevelSetOutP1 }				{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= LevelSetTopP1 }				{ Data= ValeurItem 1 0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= MeshSizeP1 }				{ Data= ValeurItem 1 0.0 }}
+		{ Champ={ Type= P1_Scalaire_Par }{ Nom= NormeP1 }					{ Data= ValeurItem 1 0 }}
+		
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= NormaleP1 }					{ Data: dimension/vecteur.txt }}
+		{ Champ={ Type= P1_Vecteur_Par }{ Nom= NormaleObjetDistP1 }			{ Data: dimension/vecteur.txt }}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+	}
+}

@@ -1,0 +1,755 @@
+
+{ MeshPreparation= 
+	{ Type= ModeleDeModeles }
+   	{ Data=
+        { Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= NbReynolds }
+			{ Data= ValeurItem 1 100 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= turb }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= yplus }
+			{ Data= ValeurItem 1 1 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= LayersOverride }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Hbox2 }
+			{ Data= ValeurItem 1 0.1 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Hbox3 }
+			{ Data= ValeurItem 1 0.5 }
+	   	}
+        { Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Box }
+			{ Data= ValeurItem 1 0 }
+	   	}
+        { Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= MaillagePerso }
+			{ Data= ValeurItem 1 0 }
+	   	}
+        { Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Box2 }
+			{ Data= ValeurItem 1 1 }
+	   	}
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= Meshsize2 }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Hbox }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Hbox11 }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Layers }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= Indicator }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= LevelSetLayer2bis }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= LevelSetLayer0 }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= LevelSetBL }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Growth }
+			{ Data= ValeurItem 1 1.2  }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= FactorD }
+			{ Data= ValeurItem 1 1 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Np }  
+			{ Data= ValeurItem 1 1 }
+	   	}
+		{ Champ=
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Surface }
+			{ Data= ValeurItem 1 0.0 }
+		}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Isotrope }  
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= InverseLevelSet }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+            { Type= P1_Tenseur_Par }
+            { Nom= TailleDeMaille1 }
+            { Data= ValeurItem 4 0 0 0 0 } 
+        }
+        { Champ= 
+            { Type= P1_Vecteur_Par }
+            { Nom= GradientLevelSetP1 }
+            { Data= ValeurItem 2 0 0 }
+        }
+        { Champ= 
+            { Type= P0_Tenseur_Par }
+            { Nom= HessienneLevelSet }
+            { Data= ValeurItem 4 0 0 0 0 }
+        }
+        { Champ= 
+            { Type= P1_Tenseur_Par }
+            { Nom= HessienneLevelSetP1 }
+            { Data= ValeurItem 4 0 0 0 0 }
+        }
+        { Champ= 
+            { Type= P0C_Scalaire_Par }
+            { Nom= LengthRe }
+            { Data= ValeurItem 1 1 }
+        }
+        { Champ= 
+            { Type= P0C_Scalaire_Par }
+            { Nom= Hint }
+            { Data= ValeurItem 1 1 }
+        }
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= Ratio }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= Test }
+			{ Data= ValeurItem 1 0 }
+	   	}
+	}
+	{ Dependance=  
+        { Maillage= MaillagePrincipal } 	
+
+		{ Modele= InverseLevelSet }
+
+		{ Modele= ComputeMeshsize1 }
+		
+        { Modele= UpdateLevelSetMeshSize }
+        { Modele= MaxMeshsize2 }
+        { Modele= MaxMeshsize3 }
+        { Modele= MaxMeshsize0 }
+
+		{ Modele= CalculXXUX }
+		{ Modele= GradientLevelSetP1 }
+		{ Modele= CalculHessienneLevelSet }
+		{ Modele= CalculHessienneLevelSetP1 }
+ 
+		{ Modele= ComputeMeshsize2 }
+
+        { Modele= MakeSum0 } 	
+        { Modele= MakeSum } 	
+		{ Modele= MakeSum1 }
+	}
+}
+
+{ ComputeMeshsizeBox=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISMetriqueCoucheLimite }
+			{ Passe= 0 }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= TailleDeMaille1 }
+			{ NbChampParametre= 5 }
+			{ ChampParametre= Hbox LevelSetLayerBox Hbox2 LevelSetLayer2 Hbackground } 
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= LevelSetLayerBox }
+		{ Champ= LevelSetLayer2 }
+		{ Champ= Hbox }
+		{ Champ= Hbox2 }
+		{ Champ= Hbackground }
+		
+	}
+    { DependanceModifiable=
+		{ Champ= TailleDeMaille1 }
+    }
+}
+
+// *****************************************************
+// ---------------------Calcul de la taille de maille du maillage initial---------------------------
+// *****************************************************
+{ Calculh=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ Champ= 
+		    { Type= P0_Scalaire_Par }
+			{ Nom= h1 }
+			{ Data= ValeurItem 1 0.0 }
+		}
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfArete }
+            { TypeDArete= moy }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= h1 }
+ 		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= h1 }
+	}
+}
+{ PassageHP0EnHP1=
+    { Type= ModeleFonctionnel }
+    { Data=
+        { Champ= 
+			{ Type= P1_Scalaire_Par }
+			{ Nom= hh }
+			{ Data= ValeurItem 1 0.0 }
+		}
+        { SimplexSolveurFonctionnel=
+            { Type= SsfTest }
+            { NbChampSolution= 1 }
+            { ChampSolution= hh }
+            { OperationsP1=
+                { NbChampsP1= 1 }
+                { Numero= 0 }
+                { Initialise= 0.0 }
+                { Moyenner= 1 }
+                { Operateur= += } 
+            }
+            { NbChampParametre= 1 }
+            { ChampParametre= h1 }
+        }
+        { Boucle= Volume }
+    }
+    { Dependance=
+        { Maillage= MaillagePrincipal }
+        { Champ= h1 }
+    }
+}
+{ MinMeshsize=
+   { Type= ModeleParticulaire }
+   { Data=
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Hbackground }
+			{ Data= ValeurItem 1 0 }
+		}
+		{ ItemSolveur=
+			{ Type= ISMin }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= Hbackground }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= hh }
+			{ Operations=
+				{ NbChampsATraiter= 1 }
+				{ Numero= 0 }
+				{ Initialise= One }
+			}
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= hh }
+		{ Champ= One }
+	}
+}
+
+// *****************************************************
+// *****************************************************
+{ InverseLevelSet=
+	{ Type= ModeleConditionnel }
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ ChampCondition= InverseLevelSet }
+		{ ModeleTrue= ProblemLevelset }
+	}
+}
+
+{ ProblemLevelset=
+    { Type= ModeleArithmetique }
+    { Dependance= 
+        { Maillage= MaillagePrincipal }
+        { Champ= MOne }
+        { Champ= One }
+    }
+    { DependanceModifiable= 
+        { Champ= LevelSetLayer1 }
+        { Champ= Appartient1 } 
+    }
+	{ Operation= LevelSetLayer1 *= MOne }
+	{ Operation= Appartient1 *= MOne }
+	{ Operation= Appartient1 += One }
+}
+
+// *****************************************************
+// *****************************************************
+
+{ ComputeMeshsize1=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Hbox22 }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Hbox33 }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Hmin }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ ItemSolveur=
+			{ Type= ISMetriqueCoucheLimite }
+			{ Passe= 1 }
+			{ NbChampSolution= 8 }
+			{ ChampSolution= LevelSetBL LevelSetLayer0 Layers Hbox11 Hbox22 Hbox33 Hmin Indicator }
+			{ NbChampParametre= 13 }
+			{ ChampParametre= NbReynolds turb yplus Growth LengthRe LevelSetLayer1 Hbackground Hbox2 Hbox3 CompteurTemps LayersOverride MaxIterations Appartient2 } 
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= NbReynolds }
+		{ Champ= turb }
+		{ Champ= yplus }
+		{ Champ= Growth }
+		{ Champ= LengthRe }
+		{ Champ= LevelSetLayer1 }
+		{ Champ= Hbackground }
+		{ Champ= Hbox2 }
+		{ Champ= Hbox3 }
+		{ Champ= CompteurTemps }
+		{ Champ= LayersOverride }
+		{ Champ= MaxIterations }
+		{ Champ= Appartient2 }
+		
+	}
+    { DependanceModifiable=
+		{ Champ= LevelSetBL }
+        { Champ= LevelSetLayer0 }
+		{ Champ= Layers }
+		{ Champ= Hbox11 }
+		{ Champ= Hbox22 }
+		{ Champ= Hbox33 }
+		{ Champ= Hmin }
+		{ Champ= Indicator }
+    }
+}
+
+// *****************************************************
+// *****************************************************
+// *****************************************************
+// *****************************************************
+// *****************************************************
+// *****************************************************
+
+{ UpdateLevelSetMeshSize=
+    { Type= ModeleArithmetique }
+    { Dependance= 
+        { Maillage= MaillagePrincipal }
+        { Champ= MOne }
+        { Champ= LevelSetBL }
+        { Champ= LevelSetLayer2 }
+        { Champ= Appartient2 }
+    }
+    { DependanceModifiable= 
+
+        { Champ= LevelSetLayer2bis }
+    }
+	
+    { Operation= LevelSetLayer2bis = LevelSetLayer2 }
+	{ Operation= LevelSetLayer2bis *= MOne }
+
+}
+
+{ MaxMeshsize2=
+   { Type= ModeleParticulaire }
+   { Data=
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= MaxMesh2 }
+			{ Data= ValeurItem 1 10000 }
+		}
+		{ ItemSolveur=
+			{ Type= ISMin }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= MaxMesh2 }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= Indicator }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Indicator }
+	}
+}
+
+{ MaxMeshsize3=
+   { Type= ModeleParticulaire }
+   { Data=
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= MaxMesh3 }
+			{ Data= ValeurItem 1 0 }
+		}
+		{ ItemSolveur=
+			{ Type= ISMax }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= MaxMesh3 }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= LevelSetLayer2bis }
+		}
+   }
+   { Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= LevelSetLayer2bis }
+   }
+}
+
+{ MaxMeshsize0=
+   { Type= ModeleParticulaire }
+   { Data=
+		{ Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= MaxMesh0 }
+			{ Data= ValeurItem 1 0 }
+		}
+		{ ItemSolveur=
+			{ Type= ISMax }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= MaxMesh0 }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= LevelSetLayer0 }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= LevelSetLayer0 }
+	}
+}
+
+// *****************************************************
+// *****************************************************
+// *****************************************************
+// *****************************************************
+// *****************************************************
+// *****************************************************
+
+{ ComputeMeshsize2=
+	{ Type= ModeleParticulaire }
+	{ Data=
+		{ ItemSolveur=
+			{ Type= ISMetriqueCoucheLimite }
+			{ Passe= 2 }
+			{ NbChampSolution= 3 }
+			{ ChampSolution= TailleDeMaille1 Meshsize2 Ratio }
+			{ NbChampParametre= 16 }
+			{ ChampParametre= Hmin Layers Growth Hint MaxMesh0 LevelSetLayer1 GradientLevelSetP1 HessienneLevelSetP1 MaxMesh2 Hbox22 LevelSetLayer2 MaxMesh3 Hbox33 Np Surface Isotrope } // BOX 
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Hmin }
+		{ Champ= Layers }
+		{ Champ= Growth }
+		{ Champ= Hint }
+		{ Champ= MaxMesh0 }
+		{ Champ= LevelSetLayer1 }
+		{ Champ= GradientLevelSetP1 }
+		{ Champ= HessienneLevelSetP1 }
+		{ Champ= MaxMesh2 }
+		{ Champ= Hbox22 }
+		{ Champ= LevelSetLayer2 }
+		{ Champ= MaxMesh3 }
+		{ Champ= Hbox33 }
+		{ Champ= Np }
+		{ Champ= Surface }
+		{ Champ= Isotrope }
+	}
+    { DependanceModifiable=  
+        { Champ= TailleDeMaille1 }
+        { Champ= Meshsize2 }
+		{ Champ= Ratio }
+		{ Champ= Test }
+    }
+}
+
+// *****************************************************
+// *****************************************************
+// *****************************************************
+// *****************************************************
+// *****************************************************
+// *****************************************************
+
+{ MakeSum0=
+	{ Type= ModeleFonctionnel }
+	{ Data=
+		{ Champ= 
+			{ Type= P0_Scalaire_Par }
+			{ Nom= Appartient1P0 }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ SimplexSolveurFonctionnel=
+			{ Type= SsfP1P0 }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= Appartient1P0 }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= Appartient1  }
+		}
+	}
+	{ Dependance=
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Appartient1 }
+		
+	}
+}
+
+{ MakeSum=
+	{ Type= ModeleParticulaire }
+	{ Data=
+        { Champ= 
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= CountP0 }
+			{ Data= ValeurItem 1 0 }
+	   	}
+		{ ItemSolveur=
+			{ Type= ISSomme }
+			{ NbChampSolution= 1 }
+			{ ChampSolution= CountP0 }
+			{ NbChampParametre= 1 }
+			{ ChampParametre= Appartient1 }
+		      { Operations=
+            		{ NbChampsATraiter= 1 }
+            		{ Numero= 0 }
+            		{ Initialise= Zero }
+            		{ Moyenner= 0 }
+         		}
+		}
+	}
+    { Dependance=
+        { Maillage= MaillagePrincipal }
+        { Champ= Appartient1 }
+        { Champ= Zero }
+    }
+}
+
+{ MakeSum1=
+	{ Type= ModeleCapteur }
+	{ Data= 
+	    { NomFichier= NbrOfInternalNodes }
+		{ NbCapteurs= 1 }		
+		{ HAdaptation= 1 }		
+		{ Dimension= 3 }
+		{ Coordonnees= 
+			{ Point1= 0 0 0 }			
+		}
+	}
+		
+	{ Dependance= 
+	    { Maillage= MaillagePrincipal }
+	    { Champ= CountP0 }
+	}
+}
+
+{ CalculXXUX=
+    { Type= ModeleFonctionnel }
+    { Data=
+        { Champ=
+            { Type= P1_Tenseur_Par }
+            { Nom= XX }
+            { Data= ValeurItem 4 0.0 0.0 0.0 0.0 }
+        }
+        { Champ=
+            { Type= P1_Vecteur_Par }
+            { Nom= AX }
+            { Data= ValeurItem 2 0.0 0.0 }
+        }
+        { SimplexSolveurFonctionnel=
+            { Type= SsfMaTC }
+            { Passe= 1 }
+            { NbChampSolution= 2 }
+            { ChampSolution=  AX XX }
+            { OperationsP1=
+                { NbChampsP1= 2 }
+                { Numero= 0 1 }
+                { Initialise= 0.0 0 0 }
+                { Operateur= += += }
+                { Moyenner= 0 0 }
+            }
+            { NbChampParametre= 1 }
+            { ChampParametre= LevelSetLayer1 }
+        }
+    }
+    { DependanceModifiable=
+        { Champ= XX }
+    }
+    { Dependance=
+        { Maillage= MaillagePrincipal }
+        { Champ= LevelSetLayer1 }
+    }
+}
+
+{ GradientLevelSetP1=
+    { Type= ModeleParticulaire }
+    { Data=
+        { Champ=
+            { Type= P0C_Scalaire_Par }
+            { Nom= AUX }
+            { Data= ValeurItem 1 0.0  }
+        }
+        { ItemSolveur=
+            { Type= ISMaTC }
+            { Dimension= 2 }
+            { NbChampSolution= 2 }
+            { ChampSolution= GradientLevelSetP1 AUX }
+            { NbChampParametre= 2 }
+            { ChampParametre= XX AX }
+        }
+    }
+
+    { Dependance=
+        { Maillage= MaillagePrincipal }
+        { Champ= XX }
+        { Champ= AX }
+    }
+}
+
+{ CalculHessienneLevelSet=
+    { Type= ModeleFonctionnel }
+    { Data=
+        { SimplexSolveurFonctionnel=
+            { Type= SsfGradient }
+            { NbChampSolution= 1 }
+            { ChampSolution= HessienneLevelSet }
+            { NbChampParametre= 1 }
+            { ChampParametre= GradientLevelSetP1 }
+        }
+    }
+    { Dependance=
+        { Maillage= MaillagePrincipal }
+        { Champ= GradientLevelSetP1 }
+    }
+	{ DependanceModifiable=  
+ 
+        { Champ= HessienneLevelSet }  
+    }
+	
+}
+
+{ CalculHessienneLevelSetP1=
+    { Type= ModeleFonctionnel }
+    { Data=
+        { SimplexSolveurFonctionnel=
+            { Type= SsfTest }
+            { NbChampSolution= 1 }
+            { ChampSolution= HessienneLevelSetP1 }
+            { OperationsP1=
+                { NbChampsP1= 1 }
+                { Numero= 0 }
+                { Initialise= 0.0 }
+                { Moyenner= 1 }
+                { Operateur= += } 
+            }
+            { NbChampParametre= 1 }
+            { ChampParametre= HessienneLevelSet  }
+        }
+    }
+    { Dependance=
+        { Maillage= MaillagePrincipal }
+        { Champ= HessienneLevelSet }
+    }
+	{ DependanceModifiable=  
+ 
+        { Champ= HessienneLevelSetP1 }  
+    }
+}
+
+{ CalculSurfaceBrique=
+	{ Type= ModeleArithmetique }
+	{ Data=
+		{ Champ=
+			{ Type= P0C_Vecteur_Par }
+			{ Nom= DimensionB }
+			{ Data: dimension.txt }
+		}
+	}
+	{ Dependance= 
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Deux }
+		{ Champ= DimensionB }
+	}
+	{ DependanceModifiable= 
+		{ Champ= Surface }
+	}
+	
+	{ Operation= Surface sumvec= DimensionB }
+    { Operation= Surface *= Deux }
+}
+
+{ CalculSurfaceCercle=
+	{ Type= ModeleArithmetique }
+	{ Data=
+		{ Champ=
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= DimensionC }
+			{ Data: dimension.txt }
+		}
+		{ Champ=
+			{ Type= P0C_Scalaire_Par }
+			{ Nom= Pi }
+			{ Data= ValeurItem 1 3.1415927 }
+		}
+	}
+	{ Dependance= 
+		{ Maillage= MaillagePrincipal }
+		{ Champ= Deux }
+		{ Champ= DimensionC }
+		{ Champ= Pi }
+	}
+	{ DependanceModifiable= 
+		{ Champ= Surface }
+	}
+	
+	{ Operation= Surface = DimensionC }
+    { Operation= Surface *= Deux }
+    { Operation= Surface *= Pi }
+}

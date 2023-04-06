@@ -1,0 +1,49 @@
+{ CalculGradientLevelSet=
+    { Type= ModeleFonctionnel }
+    { Data=
+        { SimplexSolveurFonctionnel=
+            { Type= SsfGradient }
+            { NbChampSolution= 1 }
+            { ChampSolution= GradientLevelSet }
+            { NbChampParametre= 1 }
+            { ChampParametre= LevelSetLayer1 }
+        }
+    }
+    { Dependance=
+        { Maillage= MaillagePrincipal }
+        { Champ= LevelSetLayer1 }
+    }
+	{ DependanceModifiable=  
+ 
+        { Champ= GradientLevelSetP1 }  
+    }
+	
+}
+
+{ CalculGradientLevelSetP1=
+    { Type= ModeleFonctionnel }
+    { Data=
+        { SimplexSolveurFonctionnel=
+            { Type= SsfTest }
+            { NbChampSolution= 1 }
+            { ChampSolution= GradientLevelSetP1 }
+            { OperationsP1=
+                { NbChampsP1= 1 }
+                { Numero= 0 }
+                { Initialise= 0.0 }
+                { Moyenner= 1 }
+                { Operateur= += } 
+            }
+            { NbChampParametre= 1 }
+            { ChampParametre= GradientLevelSet  }
+        }
+    }
+    { Dependance=
+        { Maillage= MaillagePrincipal }
+        { Champ= GradientLevelSet }
+    }
+	{ DependanceModifiable=  
+ 
+        { Champ= GradientLevelSetP1 }  
+    }
+}
