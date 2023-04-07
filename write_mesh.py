@@ -128,7 +128,7 @@ def create_NACA(m, p, t, c):
     plt.show()
 
 
-create_NACA(0, 0, 12, 1)
+# create_NACA(6, 4, 12, 1)
 
 
 # print(get_coords('naca0008'))
@@ -171,8 +171,9 @@ def write_mesh(naca_name, mesh_name='mesh.msh',
     #         gmsh.model.geo.rotate([(0,point)], 0.,0., 0., 0., 0., 1., np.pi*rotate_angle/180.)
 
     curves.append(gmsh.model.geo.add_spline(points))
-    for curve in curves:
-        gmsh.model.geo.rotate([(1, curve)], 0., 0., 0., 0., 0., 1., -np.pi * rotate_angle / 180.)
+    if rotate_angle:
+        for curve in curves:
+            gmsh.model.geo.rotate([(1, curve)], 0., 0., 0., 0., 0., 1., -np.pi * rotate_angle / 180.)
 
     # print(points)
     # print(curves)
@@ -223,21 +224,26 @@ def write_t(naca_name, mesh_name, output_name='naca.t', Ramy_version=False, rota
 # for name in naca_profile:
 #     write_mesh(name, mesh_name=name+'.msh')
 #     write_t(naca_name=name, mesh_name=name+'.msh', output_name=name+'.t', Ramy_version=input)
-# write_mesh('profile_base', mesh_name='profile_base.msh')
-# write_t(na ca_name='profile_base', mesh_name='profile_base.msh', output_name='profile_base.t')
+write_mesh('naca0008', mesh_name='naca0008.msh')
+write_t(naca_name='naca0008', mesh_name='naca0008.msh', output_name='naca0008.t')
 
 
 def launch_mesh_optim(naca_name, t_name='', rotate_angle=None):
     print(f'naca name = {naca_name}')
     if not t_name:
-        t_name = naca_name + '.t'
+        if rotate_angle:
+            t_name = naca_name + '_' + str(int(rotate_angle)) +'.t'
+        else:
+            t_name = naca_name + '.t'
 
     if rotate_angle:
-        path = naca_name + '_' + str(rotate_angle)
+        path = naca_name + '_' + str(int(rotate_angle))
     else:
         path = naca_name
 
     base_dir = 'Mesh_optim_' + path
+    if os.path.isdir(base_dir):
+        shutil.rmtree(base_dir)
     shutil.copytree('Mesh_optim', base_dir)
     shutil.copy(os.path.join(path, t_name),
                 os.path.join(base_dir, 'naca.t'))
@@ -252,25 +258,48 @@ def launch_mesh_optim(naca_name, t_name='', rotate_angle=None):
     shutil.rmtree(base_dir)
 
 
-# launch_mesh_optim('naca6412')
+launch_mesh_optim('naca0008')
 
 
 def choose_mesh(naca_name):
     return 'mesh_00020.t'
 
 
-def launch_simu(naca_name, t_name='', rotate_angle=None):
+def launch_simu(naca_name, t_name='', rotate_angle=None, Re=None):
     print(f'naca name = {naca_name}')
     if not t_name:
-        t_name = naca_name + '.t'
+        if rotate_angle:
+            t_name = naca_name + '_' + str(int(rotate_angle)) + '.t'
+        else:
+            t_name = naca_name + '.t'
 
     if rotate_angle:
-        path = naca_name + '_' + str(rotate_angle)
+        path = naca_name + '_' + str(int(rotate_angle))
     else:
         path = naca_name
 
     base_dir = 'Simulator_' + path
+
+    if os.path.isdir(base_dir):
+        shutil.rmtree(base_dir)
+
     shutil.copytree('Simulator', base_dir)
+    if Re:
+        with open(os.path.join(base_dir, 'IHM.mtc'), 'r') as f:
+            lines = list(f.readlines())
+        ind = [i for i in range(len(lines)) if 'MuFluide' in lines[i]][0]
+        lines[ind] = f'{{ Target= MuFluide {1/Re} }}\n'
+        with open(os.path.join(base_dir, 'IHM.mtc'), 'w') as f:
+            f.writelines(lines)
+
+    path2sensor = os.path.join(os.path.join(base_dir, 'resultats'), 'capteurs')
+    results_files = [elem for elem in os.listdir(path2sensor)]
+    for file in results_files:
+        with open(os.path.join(path2sensor, file), 'r') as f:
+            lines = list(f.readlines())
+        with open(os.path.join(path2sensor, file), 'w') as f:
+            f.writelines(lines[0])
+
     shutil.copy(os.path.join(path, t_name),
                 os.path.join(base_dir, 'naca.t'))
     mesh_optimized = choose_mesh(naca_name=path)
