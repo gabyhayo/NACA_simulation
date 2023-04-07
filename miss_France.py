@@ -21,7 +21,7 @@ R = float(sys.argv[3])
 
 Vz = (P / (2 * rho * S))**(1/3)
 
-Re = rho * Vz * L / mu
+Re = rho * Vz * R_tot / mu
 
 
 

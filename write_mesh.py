@@ -102,18 +102,14 @@ def create_NACA(m, p, t, c):
     for elem in x:
         if elem < p:
             yc.append(m * (2 * p * elem - elem ** 2) / p ** 2)
-
+            theta.append(np.arctan(m * ( 2 * p - 2 * elem)/ p ** 2))
         else:
             yc.append(m * (1 - 2 * p + 2 * p * elem - elem ** 2) / (1 - p) ** 2)
+            theta.append(np.arctan(m * ( 2 * p - 2 * elem)/ (1 - p ** 2)))
 
         yt.append(t * (0.2969 * np.sqrt(
             elem) - 0.1260 * elem - 0.3516 * elem ** 2 + 0.2843 * elem ** 3 - 0.1015 * elem ** 4) / 0.2)
 
-    for i, elem in enumerate(x):
-        if i == 0:
-            theta.append(0)
-        else:
-            theta.append((yc[i] - yc[i - 1]) / (x[i] - x[i - 1]))
     yc = np.array(yc)
     yt = np.array(yt)
     theta = np.array(theta)
@@ -132,7 +128,7 @@ def create_NACA(m, p, t, c):
     plt.show()
 
 
-create_NACA(6, 4, 12, 1)
+create_NACA(0, 0, 12, 1)
 
 
 # print(get_coords('naca0008'))
