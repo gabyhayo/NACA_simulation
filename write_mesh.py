@@ -9,23 +9,38 @@ import shutil
 h = 0.01  # mesh size
 
 # input = sys.argv[1]
-naca_profile = [name for name in os.listdir() if name.startswith('naca')]
+naca_profile = [name for name in os.listdir() if name.startswith('naca')]  # list of all naca folders in the dir
 print(naca_profile)
 
 
 def check_dir(naca_name, rotate_angle=None):
+    """
+    This function check if the directory exists or not, if not make the directory
+    :param naca_name: the name of the naca profile
+    :param rotate_angle: if rotation of the profile, equals to the rotation in degree (float)
+    :return: /
+    """
     if rotate_angle:
-        path = naca_name + '_' + str(rotate_angle)
+        path = naca_name + '_' + str(rotate_angle)  # define the path
     else:
         path = naca_name
 
     if not os.path.isdir(path):
-        os.mkdir(path)
+        os.mkdir(path)  # make directory
         shutil.copy(os.path.join(naca_name, naca_name + '.csv'),
-                    os.path.join(path, path + '.csv'))
+                    os.path.join(path, path + '.csv'))  # copy the naca profile '.csv' in the new directory
 
 
 def get_coords(naca_name, dat=True, naca=False, normalize=True, to0=True):
+    """
+    get coordinates of the control points of your profile
+    :param naca_name:  the name of the naca profile
+    :param dat: True if .csv comes from the scrapping
+    :param naca: True if .csv manually downloaded
+    :param normalize: True if you want your profile coordinates to be between -1 and 1
+    :param to0: True if you want your profile x-coordinates to begin at 0
+    :return: x-coordinates (np.array), Y-coordinates (np.array)
+    """
     if naca:
         path = os.path.join(naca_name, naca_name + '-il.csv')
         with open(path, 'r') as f:
@@ -53,10 +68,9 @@ def get_coords(naca_name, dat=True, naca=False, normalize=True, to0=True):
     elif dat:
         path = os.path.join(naca_name, naca_name + '.csv')
 
+        # read .csv file
         with open(path, 'r') as f:
             reader = list(csv.reader(f))[1:]
-            # print(reader[1][0])
-            # print(reader[1][0].strip(' ').split(' '))
 
         X = []
         Y = []
@@ -69,25 +83,35 @@ def get_coords(naca_name, dat=True, naca=False, normalize=True, to0=True):
             else:
                 row = row.strip(' ').split('  ')
 
-            # print(row)
+            # get coordinates
             X.append(float(row[0]))
             Y.append(float(row[1]))
 
         X = np.array(X)
         Y = np.array(Y)
 
+        # translate x-coordinates to 0
         if to0:
             X = X - min(X)
 
+        # normalize x and y coordinates
         if normalize:
             max_value = max(np.max(abs(X)), np.max(abs(Y)))
 
             X, Y = X / max_value, Y / max_value
-    # print(X, Y)
     return X, Y
 
 
 def create_NACA(m, p, t, c):
+    """
+    create a NACA profile from the 4 digits and the chord length,
+    and write its associate .csv (dat type for geet_coords function)
+    :param m: maximum camber in percentage of chord
+    :param p: position of the maximum camber in tenths of chord
+    :param t: maximum thickness in percentage of chord
+    :param c: chord length
+    :return: /
+    """
     m = m * c / 100
     p = p * c / 10
     t = t * c / 100
@@ -97,15 +121,14 @@ def create_NACA(m, p, t, c):
     yc = []
     yt = []
     theta = []
-    print(len(x))
 
     for elem in x:
         if elem < p:
             yc.append(m * (2 * p * elem - elem ** 2) / p ** 2)
-            theta.append(np.arctan(m * ( 2 * p - 2 * elem)/ p ** 2))
+            theta.append(np.arctan(m * (2 * p - 2 * elem) / p ** 2))
         else:
             yc.append(m * (1 - 2 * p + 2 * p * elem - elem ** 2) / (1 - p) ** 2)
-            theta.append(np.arctan(m * ( 2 * p - 2 * elem)/ (1 - p ** 2)))
+            theta.append(np.arctan(m * (2 * p - 2 * elem) / (1 - p ** 2)))
 
         yt.append(t * (0.2969 * np.sqrt(
             elem) - 0.1260 * elem - 0.3516 * elem ** 2 + 0.2843 * elem ** 3 - 0.1015 * elem ** 4) / 0.2)
@@ -113,8 +136,6 @@ def create_NACA(m, p, t, c):
     yc = np.array(yc)
     yt = np.array(yt)
     theta = np.array(theta)
-
-    print(yc)
 
     xu = x - yt * np.sin(theta)
     yu = yc + yt * np.cos(theta)
@@ -128,79 +149,84 @@ def create_NACA(m, p, t, c):
     plt.show()
 
 
-# create_NACA(5, 5, 5, 1)
-
-
-# print(get_coords('naca0008'))
-
-
-def write_mesh(naca_name, mesh_name='mesh.msh',
-               optim_Flag=False, X_optim=None, Y_optim=None,
+def write_mesh(naca_name,
+               mesh_name='mesh.msh',
                rotate_angle=None):
-    if optim_Flag:
-        X, Y = X_optim, Y_optim
-
-    else:
-        X, Y = get_coords(naca_name=naca_name)
-
-    gmsh.initialize()
+    """
+    write the mesh of the naca in the naca_name folder, gmsh 2.16.0
+    :param naca_name: the name of the naca profile
+    :param mesh_name: the name of the generated mesh
+    :param rotate_angle: if rotation of the profile, equals to the rotation in degree (float)
+    :return: /
+    """
+    X, Y = get_coords(naca_name=naca_name)
 
     points = []
     curves = []
 
+    #gmsh
+    gmsh.initialize()
     for i in range(len(X)):
         if i == 0:
             first_point = gmsh.model.geo.add_point(X[i], Y[i], 0, h)
-            # if rotate_angle:
-            #     gmsh.model.geo.rotate([(0, first_point)], 0., 0., 0., 0., 0., 1., np.pi * rotate_angle / 180.)
-
             points.append(first_point)
         else:
             point = gmsh.model.geo.add_point(X[i], Y[i], 0., h)
-            # print(f'point = {point}')
-            # if rotate_angle:
-            #     gmsh.model.geo.rotate([(0, point)], 0., 0., 0., 0., 0., 1., np.pi * rotate_angle / 180.)
-
             points.append(point)
 
+    # to reloop the curve on itself -> close curve
     points.append(first_point)
 
-    # if rotate_angle:
-    #     for point in points:
-    #         print(point)
-    #         gmsh.model.geo.rotate([(0,point)], 0.,0., 0., 0., 0., 1., np.pi*rotate_angle/180.)
-
+    #create curves
     curves.append(gmsh.model.geo.add_spline(points))
+
     if rotate_angle:
-        for curve in curves:
-            gmsh.model.geo.rotate([(1, curve)], 0., 0., 0., 0., 0., 1., -np.pi * rotate_angle / 180.)
+        angle = - np.pi * rotate_angle / 180.
+        for curve in curves: # rotation of the mesh
+            gmsh.model.geo.rotate([(1, curve)], 0., 0., 0., 0., 0., 1., angle)
 
-    
+        # impossible to get the new coordinates of the points, compute by hand
+        coords = [[x, y] for x, y in zip(X, Y)]
+        mat_rot = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]])
+        coords_rot = [np.matmul(mat_rot, elem) for elem in coords]
+        X_rot, Y_rot = zip(*coords_rot) # new coordinates of the points after the rotation
 
-    # print(points)
-    # print(curves)
+        Y_min, Y_max = min(Y_rot), max(Y_rot)
 
-    face = gmsh.model.geo.add_curve_loop(curves)
-    # print(face)
-    # gmsh.model.geo.rotate([(2, face)], 0.,0., 0., 0., 0., 1., np.pi*rotate_angle/180.)
+        if Y_min < -0.2: #outside the box of BoundaryLayerMesh
+            for curve in curves:
+                # translation in y-direction in order to be in the box
+                gmsh.model.geo.translate([(1, curve)], 0., - 0.2 - Y_min + (0.4 - (Y_max + abs(Y_min))) / 2, 0.)
 
-    surface = gmsh.model.geo.add_plane_surface([face])
+    face = gmsh.model.geo.add_curve_loop(curves)      #create face
+
+    surface = gmsh.model.geo.add_plane_surface([face]) #create surface, mandatory for mesh generation
 
     gmsh.model.geo.synchronize()
-
     gmsh.model.mesh.generate()
-
     gmsh.option.setNumber("Mesh.MshFileVersion", 2.16)
+
     if rotate_angle:
         save_name = naca_name + '_' + str(rotate_angle)
     else:
         save_name = naca_name
-    gmsh.write(os.path.join(save_name, mesh_name))
 
+    gmsh.write(os.path.join(save_name, mesh_name))
     gmsh.finalize()
 
 
-def write_t(naca_name, mesh_name, output_name='naca.t', Ramy_version=False, rotate_angle=None):
+def write_t(naca_name,
+            mesh_name,
+            output_name='naca.t',
+            rotate_angle=None):
+    """
+
+    :param naca_name:
+    :param mesh_name:
+    :param output_name:
+    :param rotate_angle:
+    :return:
+    """
     if rotate_angle:
         path = naca_name + '_' + str(rotate_angle)
     else:
@@ -208,12 +234,9 @@ def write_t(naca_name, mesh_name, output_name='naca.t', Ramy_version=False, rota
 
     shutil.copy(os.path.join(path, mesh_name),
                 mesh_name)
-    if not Ramy_version:
-        os.system(""f'python gmsh2mtc_2.py {mesh_name} {output_name}'"")
 
-    else:
-        os.system(""f'python gmsh2mtc.py {mesh_name} {output_name}'"")
-        os.system(""f'echo 0 | mtc.exe {output_name}')
+    os.system(""f'python gmsh2mtc.py {mesh_name} {output_name}'"")
+    os.system(""f'echo 0 | mtc.exe {output_name}')
 
     shutil.copy(output_name,
                 os.path.join(path, output_name),
@@ -226,7 +249,7 @@ def write_t(naca_name, mesh_name, output_name='naca.t', Ramy_version=False, rota
 # for name in naca_profile:
 #     write_mesh(name, mesh_name=name+'.msh')
 #     write_t(naca_name=name, mesh_name=name+'.msh', output_name=name+'.t', Ramy_version=input)
-# write_mesh('naca0008', mesh_name='naca0008.msh')
+# write_mesh('naca6412', mesh_name='naca6412.msh', rotate_angle=20)
 # write_t(naca_name='naca0008', mesh_name='naca0008.msh', output_name='naca0008.t', Ramy_version=True)
 
 
@@ -234,7 +257,7 @@ def launch_mesh_optim(naca_name, t_name='', rotate_angle=None):
     print(f'naca name = {naca_name}')
     if not t_name:
         if rotate_angle:
-            t_name = naca_name + '_' + str(int(rotate_angle)) +'.t'
+            t_name = naca_name + '_' + str(int(rotate_angle)) + '.t'
         else:
             t_name = naca_name + '.t'
 
@@ -290,7 +313,7 @@ def launch_simu(naca_name, t_name='', rotate_angle=None, Re=None):
         with open(os.path.join(base_dir, 'IHM.mtc'), 'r') as f:
             lines = list(f.readlines())
         ind = [i for i in range(len(lines)) if 'MuFluide' in lines[i]][0]
-        lines[ind] = f'{{ Target= MuFluide {1/Re} }}\n'
+        lines[ind] = f'{{ Target= MuFluide {1 / Re} }}\n'
         with open(os.path.join(base_dir, 'IHM.mtc'), 'w') as f:
             f.writelines(lines)
 

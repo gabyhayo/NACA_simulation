@@ -5,7 +5,8 @@ import keyboard
 from write_mesh import write_mesh, write_t, launch_mesh_optim, launch_simu, check_dir
 
 naca_list = ['naca2424', 'naca4424', 'naca6412']
-angle_list = [0, 5, 10, 20]
+angle_list = [0, 5, 10, 15]
+# angle_list = [15]
 
 w = 10_000  # tour/min
 w = w * 2. * np.pi / 60.  # rad/s
