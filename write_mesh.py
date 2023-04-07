@@ -128,7 +128,7 @@ def create_NACA(m, p, t, c):
     plt.show()
 
 
-# create_NACA(6, 4, 12, 1)
+# create_NACA(5, 5, 5, 1)
 
 
 # print(get_coords('naca0008'))
@@ -175,6 +175,8 @@ def write_mesh(naca_name, mesh_name='mesh.msh',
         for curve in curves:
             gmsh.model.geo.rotate([(1, curve)], 0., 0., 0., 0., 0., 1., -np.pi * rotate_angle / 180.)
 
+    
+
     # print(points)
     # print(curves)
 
@@ -211,7 +213,7 @@ def write_t(naca_name, mesh_name, output_name='naca.t', Ramy_version=False, rota
 
     else:
         os.system(""f'python gmsh2mtc.py {mesh_name} {output_name}'"")
-        os.system(""f'mtc.exe {output_name}')
+        os.system(""f'echo 0 | mtc.exe {output_name}')
 
     shutil.copy(output_name,
                 os.path.join(path, output_name),
@@ -224,8 +226,8 @@ def write_t(naca_name, mesh_name, output_name='naca.t', Ramy_version=False, rota
 # for name in naca_profile:
 #     write_mesh(name, mesh_name=name+'.msh')
 #     write_t(naca_name=name, mesh_name=name+'.msh', output_name=name+'.t', Ramy_version=input)
-write_mesh('naca0008', mesh_name='naca0008.msh')
-write_t(naca_name='naca0008', mesh_name='naca0008.msh', output_name='naca0008.t')
+# write_mesh('naca0008', mesh_name='naca0008.msh')
+# write_t(naca_name='naca0008', mesh_name='naca0008.msh', output_name='naca0008.t', Ramy_version=True)
 
 
 def launch_mesh_optim(naca_name, t_name='', rotate_angle=None):
@@ -258,7 +260,7 @@ def launch_mesh_optim(naca_name, t_name='', rotate_angle=None):
     shutil.rmtree(base_dir)
 
 
-launch_mesh_optim('naca0008')
+# launch_mesh_optim('naca0008')
 
 
 def choose_mesh(naca_name):

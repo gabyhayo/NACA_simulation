@@ -11,10 +11,10 @@ w = 10_000  # tour/min
 w = w * 2. * np.pi / 60.  # rad/s
 rho = 1.3  # kg.m-3
 mu = 1.8 * 10 ** (-5)  # Pa s
-R_tot = 0.12  # m
+R_tot = 0.06  # m
 S = np.pi * R_tot ** 2
 P = 167  # W
-L = 0.02  # m [largeur de l'aile]
+L = 0.015  # m [largeur de l'aile]
 
 naca = sys.argv[1]
 angle = float(sys.argv[2])
@@ -41,5 +41,5 @@ Re = rho * V * L * np.cos(angle)/ mu
 # keyboard.press_and_release('enter')
 #
 #
-# launch_mesh_optim(naca_name=naca, rotate_angle=angle)
-launch_simu(naca_name=naca, rotate_angle=angle, Re=Re)
+launch_mesh_optim(naca_name=naca, rotate_angle=angle)
+# launch_simu(naca_name=naca, rotate_angle=angle, Re=Re)
