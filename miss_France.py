@@ -69,8 +69,13 @@ def Miss_France(naca_name, rotate_angle):
     launch_mesh_optim(naca_name=naca_name, rotate_angle=rotate_angle)
     launch_simu(naca_name=naca_name, rotate_angle=rotate_angle, Re=Re, radius=R)
 
+    if R:
+        results_folders = 'resultats_' + str(R)
+    else:
+        results_folders = 'resultats'
+
     path2Efforts = os.path.join(os.path.join(os.path.join(naca_name + '_' + str(int(rotate_angle))
-                                                          , 'resultats'),
+                                                          , results_folders),
                                              'capteurs'
                                              ),
                                 'Efforts.txt'
