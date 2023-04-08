@@ -419,12 +419,10 @@ def get_force(path, alpha, t_min=10.):
 
 
 if __name__ == "__main__":
-    # create_NACA(0, 0, 12, 1, save_path='naca_test_creation.csv')
+    pass
     # get_force(os.path.join(
     #     r'C:\Users\computer\etudes\Mines\2A\Mecaero\Aero\NACA_simulation\Simulator_naca6412_5\resultats\capteurs',
     #     'Efforts.txt'))
-    # shutil.copy('naca_test_creation.csv', os.path.join('naca_test_creation', 'naca_test_creation.csv'))
-    write_mesh('naca_test_creation', )
     # for name in naca_profile:
     #     write_mesh(name, mesh_name=name+'.msh')
     #     write_t(naca_name=name, mesh_name=name+'.msh', output_name=name+'.t', Ramy_version=input)
