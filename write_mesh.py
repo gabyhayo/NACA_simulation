@@ -1,5 +1,4 @@
 import csv
-import sys
 import matplotlib.pyplot as plt
 import gmsh
 import os
@@ -8,7 +7,6 @@ import shutil
 
 h = 0.01  # mesh size
 
-# input = sys.argv[1]
 naca_profile = [name for name in os.listdir() if name.startswith('naca')]  # list of all naca folders in the dir
 print(naca_profile)
 
@@ -21,7 +19,7 @@ def check_dir(naca_name, rotate_angle=None):
     :return: /
     """
     if rotate_angle:
-        path = naca_name + '_' + str(rotate_angle)  # define the path
+        path = naca_name + '_' + str(int(rotate_angle))  # define the path
     else:
         path = naca_name
 
@@ -78,11 +76,10 @@ def get_coords(naca_name, dat=True, naca=False, normalize=True, to0=True):
             row = reader[i][0]
             if naca_name == 'profile_base':
                 row = row.strip(' ').split(' ')
-            elif '-' in row:
+            elif '-' in row[1:]:
                 row = row.strip(' ').split(' ')
             else:
                 row = row.strip(' ').split('  ')
-
             # get coordinates
             X.append(float(row[0]))
             Y.append(float(row[1]))
@@ -102,7 +99,7 @@ def get_coords(naca_name, dat=True, naca=False, normalize=True, to0=True):
     return X, Y
 
 
-def create_NACA(m, p, t, c):
+def create_NACA(m, p, t, c, plot_Flag=False, save_path=''):
     """
     create a NACA profile from the 4 digits and the chord length,
     and write its associate .csv (dat type for geet_coords function)
@@ -110,14 +107,18 @@ def create_NACA(m, p, t, c):
     :param p: position of the maximum camber in tenths of chord
     :param t: maximum thickness in percentage of chord
     :param c: chord length
+    :param plot_Flag: True if you want to plot the profile
     :return: /
     """
     m = m * c / 100
     p = p * c / 10
     t = t * c / 100
 
-    n = 100
-    x = np.linspace(0, c, n)
+    n0 = 10
+    n1 = 10
+    n2 = 20
+    x = np.concatenate((np.linspace(0, 0.02 * c, n0), np.linspace(0.02 * c, 0.1 * c, n1), np.linspace(0.1 * c, c, n2)))
+    print(x)
     yc = []
     yt = []
     theta = []
@@ -142,16 +143,35 @@ def create_NACA(m, p, t, c):
     xl = x + yt * np.sin(theta)
     yl = yc - yt * np.cos(theta)
 
-    plt.scatter(xu, yu, c='r')
-    plt.scatter(xl, yl)
-    plt.xlim(left=-0.05, right=1.05)
-    plt.ylim(bottom=-0.2, top=0.2)
-    plt.show()
+    if plot_Flag:
+        plt.scatter(xu, yu, c='r')
+        plt.scatter(xl, yl)
+        plt.xlim(left=-0.05, right=1.05)
+        plt.ylim(bottom=-0.2, top=0.2)
+        plt.show()
+
+    if save_path:
+        writer = ['NACA\n']
+        for x, y in zip(xu[::-1][:-1], yu[::-1][:-1]):
+            if y >= 0:
+                writer.append(f'{x}  {y}\n')
+            else:
+                writer.append(f'{x} {y}\n')
+
+        for x, y in zip(xl, yl):
+            if y >= 0:
+                writer.append(f'{x}  {y}\n')
+            else:
+                writer.append(f'{x} {y}\n')
+
+        with open(save_path, 'w', newline='\n') as f:
+            f.writelines(writer)
 
 
 def write_mesh(naca_name,
                mesh_name='mesh.msh',
-               rotate_angle=None):
+               rotate_angle=None,
+               in_optim_Flag=False):
     """
     write the mesh of the naca in the naca_name folder, gmsh 2.16.0
     :param naca_name: the name of the naca profile
@@ -164,7 +184,7 @@ def write_mesh(naca_name,
     points = []
     curves = []
 
-    #gmsh
+    # gmsh
     gmsh.initialize()
     for i in range(len(X)):
         if i == 0:
@@ -177,37 +197,37 @@ def write_mesh(naca_name,
     # to reloop the curve on itself -> close curve
     points.append(first_point)
 
-    #create curves
+    # create curves
     curves.append(gmsh.model.geo.add_spline(points))
 
     if rotate_angle:
         angle = - np.pi * rotate_angle / 180.
-        for curve in curves: # rotation of the mesh
+        for curve in curves:  # rotation of the mesh
             gmsh.model.geo.rotate([(1, curve)], 0., 0., 0., 0., 0., 1., angle)
 
         # impossible to get the new coordinates of the points, compute by hand
         coords = [[x, y] for x, y in zip(X, Y)]
         mat_rot = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]])
         coords_rot = [np.matmul(mat_rot, elem) for elem in coords]
-        X_rot, Y_rot = zip(*coords_rot) # new coordinates of the points after the rotation
+        X_rot, Y_rot = zip(*coords_rot)  # new coordinates of the points after the rotation
 
         Y_min, Y_max = min(Y_rot), max(Y_rot)
 
-        if Y_min < -0.2: #outside the box of BoundaryLayerMesh
+        if Y_min < -0.2:  # outside the box of BoundaryLayerMesh
             for curve in curves:
                 # translation in y-direction in order to be in the box
                 gmsh.model.geo.translate([(1, curve)], 0., - 0.2 - Y_min + (0.4 - (Y_max + abs(Y_min))) / 2, 0.)
 
-    face = gmsh.model.geo.add_curve_loop(curves)      #create face
+    face = gmsh.model.geo.add_curve_loop(curves)  # create face
 
-    surface = gmsh.model.geo.add_plane_surface([face]) #create surface, mandatory for mesh generation
+    surface = gmsh.model.geo.add_plane_surface([face])  # create surface, mandatory for mesh generation
 
     gmsh.model.geo.synchronize()
     gmsh.model.mesh.generate()
     gmsh.option.setNumber("Mesh.MshFileVersion", 2.16)
 
-    if rotate_angle:
-        save_name = naca_name + '_' + str(rotate_angle)
+    if rotate_angle and not in_optim_Flag:
+        save_name = naca_name + '_' + str(int(rotate_angle))
     else:
         save_name = naca_name
 
@@ -220,84 +240,100 @@ def write_t(naca_name,
             output_name='naca.t',
             rotate_angle=None):
     """
-
-    :param naca_name:
-    :param mesh_name:
-    :param output_name:
-    :param rotate_angle:
-    :return:
+    write the .t file associated with a mesh
+    :param naca_name: the name of the naca profile
+    :param mesh_name: the name of the associated profile
+    :param output_name: the name of the .t file generated
+    :param rotate_angle: if rotation of the profile, equals to the rotation in degree (float) !!! only used for path !!!
+    :return: /
     """
-    if rotate_angle:
-        path = naca_name + '_' + str(rotate_angle)
-    else:
-        path = naca_name
-
-    shutil.copy(os.path.join(path, mesh_name),
-                mesh_name)
-
-    os.system(""f'python gmsh2mtc.py {mesh_name} {output_name}'"")
-    os.system(""f'echo 0 | mtc.exe {output_name}')
-
-    shutil.copy(output_name,
-                os.path.join(path, output_name),
-                )
-    os.remove(mesh_name)
-    os.remove(output_name)
-
-
-# write_mesh('naca0009', rotate_angle=-30.)
-# for name in naca_profile:
-#     write_mesh(name, mesh_name=name+'.msh')
-#     write_t(naca_name=name, mesh_name=name+'.msh', output_name=name+'.t', Ramy_version=input)
-# write_mesh('naca6412', mesh_name='naca6412.msh', rotate_angle=20)
-# write_t(naca_name='naca0008', mesh_name='naca0008.msh', output_name='naca0008.t', Ramy_version=True)
-
-
-def launch_mesh_optim(naca_name, t_name='', rotate_angle=None):
-    print(f'naca name = {naca_name}')
-    if not t_name:
-        if rotate_angle:
-            t_name = naca_name + '_' + str(int(rotate_angle)) + '.t'
-        else:
-            t_name = naca_name + '.t'
-
+    # define path
     if rotate_angle:
         path = naca_name + '_' + str(int(rotate_angle))
     else:
         path = naca_name
 
-    base_dir = 'Mesh_optim_' + path
-    if os.path.isdir(base_dir):
-        shutil.rmtree(base_dir)
-    shutil.copytree('Mesh_optim', base_dir)
-    shutil.copy(os.path.join(path, t_name),
-                os.path.join(base_dir, 'naca.t'))
+    # copy the mesh in ./
+    shutil.copy(os.path.join(path, mesh_name),
+                mesh_name)
 
-    os.chdir(base_dir)
-    os.system('"LANCER"')
-    os.chdir(os.path.dirname(os.getcwd()))
-    if os.path.isdir(os.path.join(path, 'Output_mesh_optim')):
-        shutil.rmtree(os.path.join(path, 'Output_mesh_optim'))
-    shutil.copytree(os.path.join(base_dir, 'Output'),
-                    os.path.join(path, 'Output_mesh_optim'))
-    shutil.rmtree(base_dir)
+    # launch scripts
+    os.system(""f'python gmsh2mtc.py {mesh_name} {output_name}'"")
+    os.system(""f'echo 0 | mtc.exe {output_name}')
 
+    # copy the .t in ./naca_name
+    shutil.copy(output_name,
+                os.path.join(path, output_name),
+                )
 
-# launch_mesh_optim('naca0008')
+    # remove the mesh and .t in ./
+    os.remove(mesh_name)
+    os.remove(output_name)
 
 
-def choose_mesh(naca_name):
-    return 'mesh_00020.t'
-
-
-def launch_simu(naca_name, t_name='', rotate_angle=None, Re=None):
+def launch_mesh_optim(naca_name, t_name='', rotate_angle=None):
+    """
+    launch the optimization of the boundary layer mesh of the naca_name profile
+    :param naca_name: the name of the naca profile
+    :param t_name: the name of the .t file
+    :param rotate_angle: if rotation of the profile, equals to the rotation in degree (float) !!! only used for path !!!
+    :return: /
+    """
     print(f'naca name = {naca_name}')
+
+    # define name of the .t file
     if not t_name:
         if rotate_angle:
             t_name = naca_name + '_' + str(int(rotate_angle)) + '.t'
         else:
             t_name = naca_name + '.t'
 
+    # define path
+    if rotate_angle:
+        path = naca_name + '_' + str(int(rotate_angle))
+    else:
+        path = naca_name
+
+    if not os.path.isdir(os.path.join(path, 'Output_mesh_optim')):  # try if the Boundary layer mesh already computed
+        base_dir = 'Mesh_optim_' + path
+        if os.path.isdir(base_dir):  # if the directory already exists
+            shutil.rmtree(base_dir)  # remove the directory
+        shutil.copytree('Mesh_optim', base_dir)  # create a new directory with all the files for the simulation
+        shutil.copy(os.path.join(path, t_name),
+                    os.path.join(base_dir, 'naca.t'))  # copy the .t file
+
+        os.chdir(base_dir)  # go to base_dir
+        os.system('"LANCER"')  # launch the optimization of the boundary layer mesh
+        os.chdir(os.path.dirname(os.getcwd()))  # go to ./
+        if os.path.isdir(os.path.join(path, 'Output_mesh_optim')):  # if the directory already exists
+            shutil.rmtree(os.path.join(path, 'Output_mesh_optim'))  # remove the directory
+        shutil.copytree(os.path.join(base_dir, 'Output'),
+                        os.path.join(path,
+                                     'Output_mesh_optim'))  # create a directory with the results in naca_name folder
+        shutil.rmtree(base_dir)  # remove the directory in which the optimization was computed
+
+
+def launch_simu(naca_name, t_name='', rotate_angle=None, Re=None, radius=None, only_sensors=True):
+    """
+    launch the simulation of air flow around the naca_name profile
+    :param naca_name: the name of the naca profile
+    :param t_name: the name of the .t file
+    :param rotate_angle: if rotation of the profile, equals to the rotation in degree (float) !!! only used for path !!!
+    :param Re: Reynolds number if you have to change it
+    :param radius: the radius of the section
+    :param only_sensors: True if you want to save only the sensors results
+    :return: /
+    """
+    print(f'naca name = {naca_name}')
+
+    # define name of the .t file
+    if not t_name:
+        if rotate_angle:
+            t_name = naca_name + '_' + str(int(rotate_angle)) + '.t'
+        else:
+            t_name = naca_name + '.t'
+
+    # define path
     if rotate_angle:
         path = naca_name + '_' + str(int(rotate_angle))
     else:
@@ -305,10 +341,12 @@ def launch_simu(naca_name, t_name='', rotate_angle=None, Re=None):
 
     base_dir = 'Simulator_' + path
 
-    if os.path.isdir(base_dir):
-        shutil.rmtree(base_dir)
+    if os.path.isdir(base_dir):  # if the directory already exists
+        shutil.rmtree(base_dir)  # remove the directory
 
-    shutil.copytree('Simulator', base_dir)
+    shutil.copytree('Simulator', base_dir)  # create a new directory with all the files for the simulation
+
+    # change Reynolds number in the simulation
     if Re:
         with open(os.path.join(base_dir, 'IHM.mtc'), 'r') as f:
             lines = list(f.readlines())
@@ -319,6 +357,8 @@ def launch_simu(naca_name, t_name='', rotate_angle=None, Re=None):
 
     path2sensor = os.path.join(os.path.join(base_dir, 'resultats'), 'capteurs')
     results_files = [elem for elem in os.listdir(path2sensor)]
+
+    # delete former results file, in order to only have the results of the current simulation
     for file in results_files:
         with open(os.path.join(path2sensor, file), 'r') as f:
             lines = list(f.readlines())
@@ -326,71 +366,67 @@ def launch_simu(naca_name, t_name='', rotate_angle=None, Re=None):
             f.writelines(lines[0])
 
     shutil.copy(os.path.join(path, t_name),
-                os.path.join(base_dir, 'naca.t'))
-    mesh_optimized = choose_mesh(naca_name=path)
+                os.path.join(base_dir, 'naca.t'))  # copy the .t file
+    mesh_optimized = 'Mesh_00020.t'  # the mesh used in the simulation
     shutil.copy(os.path.join(path, os.path.join('Output_mesh_optim', mesh_optimized)),
-                os.path.join(base_dir, 'domaine.t'))
+                os.path.join(base_dir, 'domaine.t'))  # copy the domaine
 
-    os.chdir(base_dir)
-    os.system('"LANCER"')
-    os.chdir(os.path.dirname(os.getcwd()))
-    shutil.copytree(os.path.join(base_dir, 'resultats'),
-                    os.path.join(path, 'resultats'))
-    shutil.rmtree(base_dir)
+    os.chdir(base_dir)  # go to base_dir
+    os.system('"LANCER"')  # launch the simulation
+    os.chdir(os.path.dirname(os.getcwd()))  # go to ./
 
-# launch_simu('naca2412')
-
-# help(shutil)
-
-
-# with open('n6409-il.csv', 'r') as f:
-#     reader = csv.reader(f)
-#     reader = list(reader)
-#     writer = []
-#     X = []
-#     Y = []
-#     for i in range(61):
-#         # if i == 0:
-#         #     first_point = gmsh.model.geo.add_point(float(reader[i][0]),float(reader[i][1]),0, h)
-#         #     points.append(first_point)
-#         # else:
-#         #     point = gmsh.model.geo.add_point(float(reader[i][0]), float(reader[i][1]), 0, h)
-#         #     # print(f'point = {point}')
-#         #     points.append(point)
-#         X.append(float(reader[i][0]))
-#         Y.append(float(reader[i][1]))
-#
-#         # print(i)
-#         # print(row)
-#         # writer.append(f'Point({i}) = ' + '{' + f'{float(reader[i][0])},{float(reader[i][1])}, 0.,h' + '};\n')
-#         writer.append(f'Point({i}) = {{{float(reader[i][0])},{float(reader[i][1])}, 0.,{h}}};\n')
-# X = np.array(X)
-# Y = np.array(Y)
-#
-# Xmax = np.max(X)
-# Ymax = np.max(Y)
-# max_value = max(Xmax, Ymax)
-# X = X / max_value
-# Y = Y / max_value
-# print(f'{Xmax}, {Ymax}')
+    if radius:
+        results_folders = 'resultats_' + str(radius)
+    else:
+        results_folders = 'resultats'
+    if os.path.isdir(os.path.join(path, results_folders)):
+        shutil.rmtree(os.path.join(path, results_folders))
+    if only_sensors:
+        os.mkdir(os.path.join(path, results_folders))
+        shutil.copytree(os.path.join(os.path.join(base_dir, 'resultats'), 'capteurs'),
+                        os.path.join(os.path.join(path, results_folders), 'capteurs'))
+        # create a directory with the results in naca_name folder
+    else:
+        shutil.copytree(os.path.join(base_dir, 'resultats'),
+                        os.path.join(path, results_folders))  # create a directory with the results in naca_name folder
+    shutil.rmtree(base_dir)  # remove the directory in which the optimization was computed
 
 
-# print(f'Point({i}) = ' + '{' + f'{float(reader[i][0])},{float(reader[i][1])}, 0.,h' + '};\n')
-# print(f'Point({i}) = {{{float(reader[i][0])},{float(reader[i][1])}, 0.,h}};\n')
+def get_force(path, alpha, t_min=10.):
+    """
+    compute the force from the 'Efforts.txt' file
+    :param path: str, path to the Efforts.txt file
+    :param alpha: angle between the x-axis and the wind direction, alpha = arctan(Vz/Vo)
+    :param t_min: minimum time such as average Fl and Fd are computed for t > t_min, avoid transitory regime
+    :return: Fl cos(alpha) - Fd sin(alpha)
+    """
+    # open 'Efforts.txt' file
+    with open(path, 'r', newline='\n') as f:
+        lines = list(f.readlines())
+
+    T, Fd, Fl = [], [], []
+
+    for line in lines[1:]:  # get time, Fd, Fl
+        T.append(float(line.strip('\r\n').split('\t')[0]))
+        Fd.append(float(line.strip('\r\n').split('\t')[1]))
+        Fl.append(float(line.strip('\r\n').split('\t')[2]))
+
+    ind_t_min = [i for i in range(len(T)) if T[i] == t_min][0]  # get index such as T[ind] = t_min
+    Fd_value = np.mean(Fd[ind_t_min:])
+    Fl_value = np.mean(Fl[ind_t_min:])
+
+    return Fl_value * np.cos(alpha) - Fd_value * np.sin(alpha)
 
 
-# print('here')
-
-# os.system('"mtc.exe surface.t 0 0 0"')
-
-
-# Spline_list = ['Spline(1) = {0:60};\n',
-#                'Spline(2)={60,0};\n',
-#                'Line Loop(3) = {1, 2};\n',
-#                'Plane Surface(4) = {3};\n'
-#                ]
-# for elem in Spline_list:
-#     writer.append(elem)
-
-# with open('doc.geo', 'w', newline='\n') as f1:
-#     f1.writelines(writer)
+if __name__ == "__main__":
+    # create_NACA(0, 0, 12, 1, save_path='naca_test_creation.csv')
+    # get_force(os.path.join(
+    #     r'C:\Users\computer\etudes\Mines\2A\Mecaero\Aero\NACA_simulation\Simulator_naca6412_5\resultats\capteurs',
+    #     'Efforts.txt'))
+    # shutil.copy('naca_test_creation.csv', os.path.join('naca_test_creation', 'naca_test_creation.csv'))
+    write_mesh('naca_test_creation', )
+    # for name in naca_profile:
+    #     write_mesh(name, mesh_name=name+'.msh')
+    #     write_t(naca_name=name, mesh_name=name+'.msh', output_name=name+'.t', Ramy_version=input)
+    # launch_mesh_optim('naca0008')
+    # launch_simu('naca2412')
