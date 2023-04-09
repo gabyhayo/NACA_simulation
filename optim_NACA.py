@@ -90,7 +90,7 @@ def cost_function(X):
     write_mesh(naca_name, mesh_name=naca_name + '.msh', rotate_angle=i, in_optim_Flag=True)
     write_t(naca_name, mesh_name=naca_name + '.msh', output_name=naca_name + '.t', )
     launch_mesh_optim(naca_name=naca_name, )
-    launch_simu(naca_name=naca_name, Re=Re, only_sensors=True)
+    launch_simu(naca_name=naca_name, Re=Re, only_sensors=True, radius=R)
 
     if R:
         results_folders = 'resultats_' + str(R)

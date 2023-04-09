@@ -74,9 +74,10 @@ def get_coords(naca_name, dat=True, naca=False, normalize=True, to0=True):
         Y = []
         for i in range(len(reader)):
             row = reader[i][0]
+            print(row)
             if naca_name == 'profile_base':
                 row = row.strip(' ').split(' ')
-            elif '-' in row[1:]:
+            elif '-' in row[[i for i in range(len(row)) if row[i]==' '][0]:]: #check if y is negative
                 row = row.strip(' ').split(' ')
             else:
                 row = row.strip(' ').split('  ')
@@ -379,8 +380,10 @@ def launch_simu(naca_name, t_name='', rotate_angle=None, Re=None, radius=None, o
         results_folders = 'resultats_' + str(radius)
     else:
         results_folders = 'resultats'
+
     if os.path.isdir(os.path.join(path, results_folders)):
         shutil.rmtree(os.path.join(path, results_folders))
+
     if only_sensors:
         os.mkdir(os.path.join(path, results_folders))
         shutil.copytree(os.path.join(os.path.join(base_dir, 'resultats'), 'capteurs'),
@@ -419,7 +422,13 @@ def get_force(path, alpha, t_min=10.):
 
 
 if __name__ == "__main__":
-    pass
+    #----------------------------------------------------------------------------------
+
+    #IN ORDER TO TEST FUNCTIONS
+
+    #----------------------------------------------------------------------------------
+    os.chdir('optim_0.03')
+    write_mesh('naca4_6.00_4.20_12.00_1.00_5.00')
     # get_force(os.path.join(
     #     r'C:\Users\computer\etudes\Mines\2A\Mecaero\Aero\NACA_simulation\Simulator_naca6412_5\resultats\capteurs',
     #     'Efforts.txt'))
