@@ -9,7 +9,7 @@ from write_mesh import create_NACA, write_mesh, write_t, launch_mesh_optim, laun
 
 R = float(sys.argv[1])  # radius in m
 
-x0 = [5, 6, 4, 12, 1]  # angle, m, p, t, c
+x0 = [5, 6, 4, 12, 0.015]  # angle[degree], m, p, t, c[m]
 
 base_dir = 'optim_' + str(R)
 if os.path.isdir(base_dir):
@@ -106,7 +106,7 @@ def cost_function(X):
     force = get_force(path2Efforts, alpha)
 
     with open(base_dir + '.txt', 'a') as f:
-        f.write(f'{optim_step}\t{-force:.3f}\t{i:.3f}\t{i:.3f}\t{p:.3f}\t{t:.3f}\t{c:.3f}\n')
+        f.write(f'{optim_step}\t{-force:.5f}\t{i:.5f}\t{i:.5f}\t{p:.5f}\t{t:.5f}\t{c:.5f}\n')
 
     return -force
 
