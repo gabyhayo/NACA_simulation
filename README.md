@@ -1,4 +1,4 @@
-# NACA_simulation
+# NACA simulation
  Project Mecaero - Mines Paris
 
 The aim of the project is to build a drone. I am in the subgroup in charge of designing the blade, we have to choose the shape of the blade in order to optimize the lift of the drone.
