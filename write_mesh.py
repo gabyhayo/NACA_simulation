@@ -8,7 +8,7 @@ import shutil
 h = 0.01  # mesh size
 
 naca_profile = [name for name in os.listdir() if name.startswith('naca')]  # list of all naca folders in the dir
-print(naca_profile)
+# print(naca_profile)
 
 
 def check_dir(naca_name, rotate_angle=None):
@@ -39,6 +39,7 @@ def get_coords(naca_name, dat=True, naca=False, normalize=True, to0=True):
     :param to0: True if you want your profile x-coordinates to begin at 0
     :return: x-coordinates (np.array), Y-coordinates (np.array)
     """
+    print(naca_name)
     if naca:
         path = os.path.join(naca_name, naca_name + '-il.csv')
         with open(path, 'r') as f:
@@ -72,7 +73,7 @@ def get_coords(naca_name, dat=True, naca=False, normalize=True, to0=True):
         X = []
         Y = []
         for i in range(len(reader)):
-            row = reader[i][0]
+            row = reader[i][0].strip()
             ind_space = [i for i in range(len(row)) if row[i] == ' '][0]  # index of first space
             if naca_name == 'profile_base':
                 row = row.strip(' ').split(' ')
@@ -80,6 +81,7 @@ def get_coords(naca_name, dat=True, naca=False, normalize=True, to0=True):
                 row = row.strip(' ').split(' ')
             else:
                 row = row.strip(' ').split('  ')
+
             # get coordinates
             X.append(float(row[0]))
             Y.append(float(row[1]))
@@ -234,6 +236,8 @@ def write_mesh(naca_name,
         gmsh.write(os.path.join(save_name, mesh_name))
         gmsh.finalize()
 
+    else:
+        print('Mesh already written')
 
 def write_t(naca_name,
             mesh_name,
@@ -271,6 +275,8 @@ def write_t(naca_name,
         os.remove(mesh_name)
         os.remove(output_name)
 
+    else:
+        print('.t file already written')
 
 def launch_mesh_optim(naca_name, t_name='', rotate_angle=None):
     """
@@ -312,6 +318,9 @@ def launch_mesh_optim(naca_name, t_name='', rotate_angle=None):
                         os.path.join(path,
                                      'Output_mesh_optim'))  # create a directory with the results in naca_name folder
         shutil.rmtree(base_dir)  # remove the directory in which the optimization was computed
+
+    else:
+        print('Boundary layer mesh already computed')
 
 
 def launch_simu(naca_name, t_name='', rotate_angle=None, Re=None, radius=None, only_sensors=True):
@@ -396,6 +405,9 @@ def launch_simu(naca_name, t_name='', rotate_angle=None, Re=None, radius=None, o
                             os.path.join(path, results_folder))  # create a directory with the results in naca_name folder
         shutil.rmtree(base_dir)  # remove the directory in which the optimization was computed
 
+    else:
+        print('Simulation already computed')
+
 
 def get_force(path, alpha, t_min=10.):
     """
@@ -429,7 +441,7 @@ if __name__ == "__main__":
     # IN ORDER TO TEST FUNCTIONS
 
     # ----------------------------------------------------------------------------------
-    os.chdir('optim_0.03')
+    # os.chdir('optim_0.03')
     write_mesh('naca4_6.00_4.20_12.00_1.00_5.00')
     # get_force(os.path.join(
     #     r'C:\Users\computer\etudes\Mines\2A\Mecaero\Aero\NACA_simulation\Simulator_naca6412_5\resultats\capteurs',
