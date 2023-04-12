@@ -5,7 +5,7 @@ import os
 import numpy as np
 import shutil
 
-h = 0.01  # mesh size
+h = 0.007  # mesh size
 
 naca_profile = [name for name in os.listdir() if name.startswith('naca')]  # list of all naca folders in the dir
 # print(naca_profile)
@@ -101,7 +101,7 @@ def get_coords(naca_name, dat=True, naca=False, normalize=True, to0=True):
     return X, Y
 
 
-def create_NACA(m, p, t, c, plot_Flag=False, save_path=''):
+def create_NACA(m, p, t, c=1., plot_Flag=False, save_path=''):
     """
     create a NACA profile from the 4 digits and the chord length,
     and write its associate .csv (dat type for geet_coords function)
@@ -442,7 +442,8 @@ if __name__ == "__main__":
 
     # ----------------------------------------------------------------------------------
     # os.chdir('optim_0.03')
-    write_mesh('naca4_6.00_4.20_12.00_1.00_5.00')
+    # write_mesh('naca4_6.00_4.20_12.00_1.00_5.00')
+    create_NACA(1,0,0.001/0.02*100, plot_Flag=True)
     # get_force(os.path.join(
     #     r'C:\Users\computer\etudes\Mines\2A\Mecaero\Aero\NACA_simulation\Simulator_naca6412_5\resultats\capteurs',
     #     'Efforts.txt'))

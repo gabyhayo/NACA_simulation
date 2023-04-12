@@ -5,11 +5,13 @@ import numpy as np
 import pickle
 from scipy import optimize
 
-from write_mesh import create_NACA, write_mesh, write_t, launch_mesh_optim, launch_simu, get_force
+from write_launch import create_NACA, write_mesh, write_t, launch_mesh_optim, launch_simu, get_force
 
 R = float(sys.argv[1])  # radius in m
 
-x0 = [5, 6, 4, 12, 0.015]  # angle[degree], m, p, t, c[m]
+c = 0.02  # m, chord length
+t = 100. * 0.001 / c  # maximum thickness in percentage of chord
+x0 = [5., 6., 3.]  # angle[degree], m, p
 
 base_dir = 'optim_' + str(R)
 if os.path.isdir(base_dir):
@@ -79,18 +81,21 @@ def cost_function(X):
     global optim_step
     optim_step += 1
 
-    i, m, p, t, c = X  # assign values, angle, m, p, t, c
+    # i, m, p, t, c = X  # assign values, angle, m, p, t, c
+    i, m, p = X  # assign values, angle, m, p
 
     # Reynolds number
     Re = rho * V * c * np.cos(i) / mu
 
     naca_name = f'naca{optim_step}_{m:.2f}_{p:.2f}_{t:.2f}_{c:.2f}_{i:.2f}'  # unique because of optim_step
     os.mkdir(naca_name)  # make directory
-    create_NACA(m, p, t, c, save_path=os.path.join(naca_name, naca_name + '.csv'), plot_Flag=False)
+    create_NACA(m, p, t, save_path=os.path.join(naca_name, naca_name + '.csv'), plot_Flag=False)
     write_mesh(naca_name, mesh_name=naca_name + '.msh', rotate_angle=i, in_optim_Flag=True)
-    write_t(naca_name, mesh_name=naca_name + '.msh', output_name=naca_name + '.t', )
-    launch_mesh_optim(naca_name=naca_name, )
-    launch_simu(naca_name=naca_name, Re=Re, only_sensors=True, radius=R)
+    write_t(naca_name, mesh_name=naca_name + '.msh',
+            output_name=naca_name + '.t', )  # no rotate angle because it is only for the name
+    launch_mesh_optim(naca_name=naca_name, )  # no rotate angle because it is only for the name
+    launch_simu(naca_name=naca_name, Re=Re, only_sensors=True,
+                radius=R)  # no rotate angle because it is only for the name
 
     if R:
         results_folders = 'resultats_' + str(R)
@@ -106,7 +111,7 @@ def cost_function(X):
     force = get_force(path2Efforts, alpha)
 
     with open(base_dir + '.txt', 'a') as f:
-        f.write(f'{optim_step}\t{-force:.5f}\t{i:.5f}\t{i:.5f}\t{p:.5f}\t{t:.5f}\t{c:.5f}\n')
+        f.write(f'{optim_step}\t{-force:.5f}\t{i:.5f}\t{m:.5f}\t{p:.5f}\t{t:.5f}\t{c:.5f}\n')
 
     return -force
 

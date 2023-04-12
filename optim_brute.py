@@ -8,7 +8,7 @@
 from scipy import minimize
 import os
 import numpy
-from write_mesh import write_mesh, write_t, launch_mesh_optim, launch_simu
+from write_launch import write_mesh, write_t, launch_mesh_optim, launch_simu
 
 name = 'optim_brute'
 

@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import sys
-from write_mesh import write_mesh, write_t, launch_mesh_optim, launch_simu, check_dir, get_force
+from write_launch import write_mesh, write_t, launch_mesh_optim, launch_simu, check_dir, get_force
 
 # naca_list = ['naca2424', 'naca4424', 'naca6412']
 # angle_list = [0, 5, 10, 15]
