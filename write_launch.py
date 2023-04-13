@@ -278,7 +278,7 @@ def write_t(naca_name,
     else:
         print('.t file already written')
 
-def launch_mesh_optim(naca_name, t_name='', rotate_angle=None):
+def launch_mesh_optim(naca_name, t_name='', rotate_angle=None, new_folder=True):
     """
     launch the optimization of the boundary layer mesh of the naca_name profile
     :param naca_name: the name of the naca profile
@@ -302,10 +302,14 @@ def launch_mesh_optim(naca_name, t_name='', rotate_angle=None):
         path = naca_name
 
     if not os.path.isdir(os.path.join(path, 'Output_mesh_optim')):  # try if the Boundary layer mesh already computed
-        base_dir = 'Mesh_optim_' + path
-        if os.path.isdir(base_dir):  # if the directory already exists
-            shutil.rmtree(base_dir)  # remove the directory
-        shutil.copytree('Mesh_optim', base_dir)  # create a new directory with all the files for the simulation
+        if new_folder:
+            base_dir = 'Mesh_optim_' + path
+            if os.path.isdir(base_dir):  # if the directory already exists
+                shutil.rmtree(base_dir)  # remove the directory
+            shutil.copytree('Mesh_optim', base_dir)  # create a new directory with all the files for the simulation
+        else:
+            base_dir = 'Mesh_optim'
+
         shutil.copy(os.path.join(path, t_name),
                     os.path.join(base_dir, 'naca.t'))  # copy the .t file
 
@@ -317,13 +321,14 @@ def launch_mesh_optim(naca_name, t_name='', rotate_angle=None):
         shutil.copytree(os.path.join(base_dir, 'Output'),
                         os.path.join(path,
                                      'Output_mesh_optim'))  # create a directory with the results in naca_name folder
-        shutil.rmtree(base_dir)  # remove the directory in which the optimization was computed
+        if new_folder:
+            shutil.rmtree(base_dir)  # remove the directory in which the optimization was computed
 
     else:
         print('Boundary layer mesh already computed')
 
 
-def launch_simu(naca_name, t_name='', rotate_angle=None, Re=None, radius=None, only_sensors=True):
+def launch_simu(naca_name, t_name='', rotate_angle=None, Re=None, radius=None, only_sensors=True, new_folder=True):
     """
     launch the simulation of air flow around the naca_name profile
     :param naca_name: the name of the naca profile
@@ -356,12 +361,17 @@ def launch_simu(naca_name, t_name='', rotate_angle=None, Re=None, radius=None, o
         results_folder = 'resultats'
 
     if not os.path.isdir(os.path.join(path, results_folder)): # if the simulation not already computed
-        base_dir = 'Simulator_' + path
 
-        if os.path.isdir(base_dir):  # if the directory already exists
-            shutil.rmtree(base_dir)  # remove the directory
+        if new_folder:
+            base_dir = 'Simulator_' + path
 
-        shutil.copytree('Simulator', base_dir)  # create a new directory with all the files for the simulation
+            if os.path.isdir(base_dir):  # if the directory already exists
+                shutil.rmtree(base_dir)  # remove the directory
+
+            shutil.copytree('Simulator', base_dir)  # create a new directory with all the files for the simulation
+
+        else:
+            base_dir = 'Simulator'
 
         # change Reynolds number in the simulation
         if Re:
@@ -403,7 +413,8 @@ def launch_simu(naca_name, t_name='', rotate_angle=None, Re=None, radius=None, o
         else:
             shutil.copytree(os.path.join(base_dir, 'resultats'),
                             os.path.join(path, results_folder))  # create a directory with the results in naca_name folder
-        shutil.rmtree(base_dir)  # remove the directory in which the optimization was computed
+        if new_folder:
+            shutil.rmtree(base_dir)  # remove the directory in which the optimization was computed
 
     else:
         print('Simulation already computed')

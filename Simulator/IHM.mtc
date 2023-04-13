@@ -15,7 +15,7 @@
 { Target= PasDeTempsIni 0.01 }
 { Target= PasDeTempsRun 0.05 }
 { Target= TempsPasDeTemps 1 }
-{ Target= TempsFin 50.0 }
+{ Target= TempsFin 40.0 }
 
 //IO
 { Target= FreqVtk 10 }

@@ -1,2 +1,2 @@
-modeles.exe -np 4 main.mtc
+modeles.exe -np 8 main.mtc
 :: pause

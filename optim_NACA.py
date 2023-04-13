@@ -11,7 +11,14 @@ R = float(sys.argv[1])  # radius in m
 
 c = 0.02  # m, chord length
 t = 100. * 0.001 / c  # maximum thickness in percentage of chord
-x0 = [5., 6., 3.]  # angle[degree], m, p
+# x0 = [5., 6., 3.]  # angle[degree], m, p
+x0_dict = {'0.03':[6.92, 6.8, 2.4],
+      '0.035':[6.36, 6.53, 2.6],
+      '0.04':[6.36, 6.93, 2.6],
+      '0.045':[5.28, 6.33, 2.9],
+      '0.05':[6.36, 6.93, 2.6],
+      } #defined thanks to first iteration
+x0 = x0_dict[str(R)]
 
 base_dir = 'optim_' + str(R)
 if os.path.isdir(base_dir):
