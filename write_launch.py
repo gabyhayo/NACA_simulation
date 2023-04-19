@@ -116,9 +116,9 @@ def create_NACA(m, p, t, c=1., plot_Flag=False, save_path=''):
     p = p * c / 10
     t = t * c / 100
 
-    n0 = 10
-    n1 = 10
-    n2 = 20
+    n0 = 20
+    n1 = 20
+    n2 = 10
     x = np.concatenate((np.linspace(0, 0.02 * c, n0), np.linspace(0.02 * c, 0.1 * c, n1), np.linspace(0.1 * c, c, n2)))
     yc = []
     yt = []
@@ -454,7 +454,7 @@ if __name__ == "__main__":
     # ----------------------------------------------------------------------------------
     # os.chdir('optim_0.03')
     # write_mesh('naca4_6.00_4.20_12.00_1.00_5.00')
-    create_NACA(1,0,0.001/0.02*100, plot_Flag=True)
+    create_NACA(12.5115, 2.04268, 2.326, plot_Flag=True,) #save_path='profile_0.03.csv')
     # get_force(os.path.join(
     #     r'C:\Users\computer\etudes\Mines\2A\Mecaero\Aero\NACA_simulation\Simulator_naca6412_5\resultats\capteurs',
     #     'Efforts.txt'))

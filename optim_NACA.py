@@ -10,15 +10,17 @@ from write_launch import create_NACA, write_mesh, write_t, launch_mesh_optim, la
 R = float(sys.argv[1])  # radius in m
 
 c = 0.02  # m, chord length
-t = 100. * 0.001 / c  # maximum thickness in percentage of chord
-# x0 = [5., 6., 3.]  # angle[degree], m, p
-x0_dict = {'0.03':[6.92, 6.8, 2.4],
-      '0.035':[6.36, 6.53, 2.6],
-      '0.04':[6.36, 6.93, 2.6],
-      '0.045':[5.28, 6.33, 2.9],
-      '0.05':[6.36, 6.93, 2.6],
-      } #defined thanks to first iteration
-x0 = x0_dict[str(R)]
+# t = 100. * 0.001 / c  # maximum thickness in percentage of chord
+x0 = [5., 6., 3.]  # angle[degree], m, p
+# x_dict = {'0.03':[6.35877, 12.5115, 2.04268],
+#       '0.035':[6.65414, 12.99274, 3.12273],
+#       '0.04':[6.40845, 14.21236, 3.72694],
+#       '0.045':[6.63384, 12.93497, 2.84327],
+#       '0.05':[6.4863, 13.86015, 3.37542],
+#       } #defined thanks to first iteration
+# i, m ,p = x_dict[str(R)]
+
+# m, p, t = 6, 4, 12
 
 base_dir = 'optim_' + str(R)
 if os.path.isdir(base_dir):
@@ -56,7 +58,7 @@ R_tot = 0.06  # m
 S = np.pi * R_tot ** 2  # m2
 
 # motor power
-P = 167  # W
+P = 80  # W
 
 # velocity of the air along z-axis
 Vz = (P / (2 * rho * S)) ** (1 / 3)
@@ -90,9 +92,10 @@ def cost_function(X):
 
     # i, m, p, t, c = X  # assign values, angle, m, p, t, c
     i, m, p = X  # assign values, angle, m, p
+    # i = X[0]  # m, chord length
 
     # Reynolds number
-    Re = rho * V * c * np.cos(i) / mu
+    Re = rho * V * c * np.cos(i * np.pi / 180.) / mu # i in radians
 
     naca_name = f'naca{optim_step}_{m:.2f}_{p:.2f}_{t:.2f}_{c:.2f}_{i:.2f}'  # unique because of optim_step
     os.mkdir(naca_name)  # make directory
@@ -100,9 +103,9 @@ def cost_function(X):
     write_mesh(naca_name, mesh_name=naca_name + '.msh', rotate_angle=i, in_optim_Flag=True)
     write_t(naca_name, mesh_name=naca_name + '.msh',
             output_name=naca_name + '.t', )  # no rotate angle because it is only for the name
-    launch_mesh_optim(naca_name=naca_name, )  # no rotate angle because it is only for the name
+    launch_mesh_optim(naca_name=naca_name, new_folder=False)  # no rotate angle because it is only for the name
     launch_simu(naca_name=naca_name, Re=Re, only_sensors=True,
-                radius=R)  # no rotate angle because it is only for the name
+                radius=R, new_folder=False)  # no rotate angle because it is only for the name
 
     if R:
         results_folders = 'resultats_' + str(R)
@@ -120,9 +123,9 @@ def cost_function(X):
     with open(base_dir + '.txt', 'a') as f:
         f.write(f'{optim_step}\t{-force:.5f}\t{i:.5f}\t{m:.5f}\t{p:.5f}\t{t:.5f}\t{c:.5f}\n')
 
-    return -force
+    return - force
 
-
+# x0 = [4.0]
 res = optimize.minimize(cost_function, x0, method='Nelder-Mead')
 
 with open('results.pkl', 'wb') as f:

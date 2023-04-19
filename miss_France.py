@@ -1,14 +1,19 @@
 import os
 import numpy as np
 import sys
-from write_launch import write_mesh, write_t, launch_mesh_optim, launch_simu, check_dir, get_force
+from write_launch import write_mesh, write_t, launch_mesh_optim, launch_simu, check_dir, get_force, create_NACA
 
 # naca_list = ['naca2424', 'naca4424', 'naca6412']
 # angle_list = [0, 5, 10, 15]
 
-naca = sys.argv[1]
-angle = float(sys.argv[2])
-R = float(sys.argv[3])
+# naca = sys.argv[1]
+
+m = float(sys.argv[1])
+p = float(sys.argv[2])
+t = float(sys.argv[3])
+
+angle = float(sys.argv[4])
+R = float(sys.argv[5])
 
 # rotation velocity
 w = 10_000  # tour/min
@@ -29,8 +34,8 @@ S = np.pi * R_tot ** 2  # m2
 # motor power
 P = 167  # W
 
-# balde width
-L = 0.015  # m
+# blade width
+c = 0.02  # m
 
 # velocity of the air along z-axis
 Vz = (P / (2 * rho * S)) ** (1 / 3)
@@ -45,7 +50,7 @@ alpha = np.arctan(Vz/Vo)
 V = np.sqrt(Vz ** 2 + Vo ** 2)
 
 # Reynolds number
-Re = rho * V * L * np.cos(angle) / mu
+Re = rho * V * c * np.cos(angle) / mu
 
 
 def Miss_France(naca_name, rotate_angle):
@@ -55,15 +60,18 @@ def Miss_France(naca_name, rotate_angle):
     :param rotate_angle: if rotation of the profile, equals to the rotation in degree (float)
     :return: /
     """
+    naca_name = 'naca_'+str(m)+'_'+str(p)+'_'+str(t)+ '_' + str(int(rotate_angle))
     # define mesh name
     mesh_name = naca_name + '_' + str(int(rotate_angle)) + '.msh'
 
+    # os.mkdir(naca_name)
     check_dir(naca_name, rotate_angle)
+    create_NACA(m, p, t, c, save_path=os.path.join(naca_name, naca_name+'.csv'))
 
     write_mesh(naca_name, mesh_name=mesh_name, rotate_angle=rotate_angle)
     write_t(naca_name=naca_name,
             mesh_name=mesh_name,
-            output_name=naca + '_' + str(int(rotate_angle)) + '.t',
+            output_name=naca_name + '_' + str(int(rotate_angle)) + '.t',
             rotate_angle=rotate_angle)
 
     launch_mesh_optim(naca_name=naca_name, rotate_angle=rotate_angle)
@@ -87,4 +95,4 @@ def Miss_France(naca_name, rotate_angle):
         f.write(f'{naca_name}\t{angle}\t{R}\t{force:.3f}\n')
 
 
-Miss_France(naca_name=naca, rotate_angle=angle)
+Miss_France(naca_name='nothing', rotate_angle=angle)
